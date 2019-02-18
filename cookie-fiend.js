@@ -1,5 +1,7 @@
 console.log("reject cookies goal loaded");
 
+const COOKIE_FIEND = "COOKIE_FIEND";
+
 const EVENTS = {
   CLICK: "click",
   STYLE: "style"
@@ -165,6 +167,14 @@ const aggregateTimeout = (eventAcc, currEvent) => {
 
 const calcTimeout = reduceToNewArr(aggregateTimeout);
 
+/* LOCAL STORAGE */
+
+const setLocalStorage = data =>
+  window.localStorage.setItem(COOKIE_FIEND, JSON.stringify(data));
+
+const readLocalStorage = () =>
+  JSON.parse(window.localStorage.getItem(COOKIE_FIEND));
+
 /* MAIN */
 
 const events = compose(
@@ -172,6 +182,9 @@ const events = compose(
   calcTimeout,
   sortEvents,
   addRepeatedEvents
-)(data);
+);
 
-runEach(events);
+const storedData = readLocalStorage();
+if (storedData) {
+  runEach(events(storedData));
+}
