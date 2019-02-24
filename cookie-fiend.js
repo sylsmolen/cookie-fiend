@@ -20,24 +20,29 @@ const data = [
     event: "click",
     name: "open settings",
     selector: "#qc-cmp-purpose-button",
-    timeout: 750
+    timeout: 750,
+    mode: EXECUTION_MODE.ONCE,
+    value: null
   },
+  // {
+  //   position: 1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "reject cookies",
+  //   selector: "button.qc-cmp-button:nth-child(1)",
+  //   timeout: 1000,
+  //   mode: EXECUTION_MODE.ONCE
+  // },
   {
     position: 1,
     repeat: 0,
     event: "click",
-    name: "reject cookies",
-    selector: "button.qc-cmp-button:nth-child(1)",
-    timeout: 1000
-  },
-  {
-    position: 1,
-    repeat: 30,
-    event: "click",
     name: "reject storage access",
     selector:
       "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
-    timeout: 1000
+    timeout: 1000,
+    mode: EXECUTION_MODE.INTERVAL,
+    value: 1000
   }
   // {
   //   position: 2,
@@ -60,6 +65,7 @@ const forEach = func => data => data.forEach(func);
 const reduceToNewArr = func => data => data.reduce(func, []);
 
 const timeout = time => func => setTimeout(func, time);
+const interval = time => func => setInterval(func, time);
 const thunk = func => data => () => func(data);
 const applyArg = data => func => func(data);
 
@@ -147,14 +153,22 @@ const createEvent = eventObj =>
 
 const createEventThunk = thunk(createEvent);
 
-const delayEvent = event =>
+const getExecutionMode = event => func => {
+  if (event.mode === EXECUTION_MODE.ONCE) {
+    return timeout(event.timeout)(func);
+  } else if (event.mode === EXECUTION_MODE.INTERVAL) {
+    return interval(event.value)(func);
+  }
+};
+
+const applyExecutionMode = event =>
   compose(
-    timeout(event.timeout),
+    getExecutionMode(event),
     createEventThunk
   )(event);
 
-const delayEventThunk = thunk(delayEvent);
-const createEventList = map(delayEventThunk);
+const delayEvent = thunk(applyExecutionMode);
+const createEventList = map(delayEvent);
 
 const aggregateTimeout = (eventAcc, currEvent) => {
   if (eventAcc.length > 1) {
@@ -185,6 +199,9 @@ const events = compose(
 );
 
 const storedData = readLocalStorage();
-if (storedData) {
-  runEach(events(storedData));
+
+if (data) {
+  const eventQueue = events(data);
+  console.log(eventQueue);
+  runEach(eventQueue);
 }
