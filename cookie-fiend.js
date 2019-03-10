@@ -26,22 +26,20 @@ const data = [
       "background-color": "white"
     },
     selectedElement: null,
-    eventHandler: null,
     trigger: null
   },
-  {
-    position: 0.1,
-    repeat: 0,
-    event: "click",
-    name: "open settings",
-    selector: "#qc-cmp-purpose-button",
-    timeout: 500,
-    mode: "once",
-    value: null,
-    selectedElement: null,
-    eventHandler: null,
-    trigger: null
-  },
+  // {
+  //   position: 0.1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "open settings",
+  //   selector: "#qc-cmp-purpose-button",
+  //   timeout: 1000,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   trigger: null
+  // },
   {
     position: 1,
     repeat: 0,
@@ -52,37 +50,33 @@ const data = [
     timeout: 1000,
     mode: EXECUTION_MODE.INTERVAL,
     value: 1000,
+    selectedElement: null,
+    trigger: null
+  },
+  {
+    position: 1,
+    repeat: 0,
+    event: "click",
+    name: "reject cookies",
+    selector: "button.qc-cmp-button:nth-child(1)",
+    timeout: 0,
+    mode: "once",
     value: null,
     selectedElement: null,
-    eventHandler: null,
+    trigger: null
+  },
+  {
+    position: 2,
+    repeat: 0,
+    event: "click",
+    name: "save",
+    selector: ".qc-cmp-save-and-exit",
+    timeout: 0,
+    mode: "once",
+    value: null,
+    selectedElement: null,
     trigger: null
   }
-  // {
-  //   position: 1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "reject cookies",
-  //   selector: "button.qc-cmp-button:nth-child(1)",
-  //   timeout: 0,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   eventHandler: null,
-  //   trigger: null
-  // },
-  // {
-  //   position: 2,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "save",
-  //   selector: ".qc-cmp-save-and-exit",
-  //   timeout: 0,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   eventHandler: null,
-  //   trigger: null
-  // }
 ];
 
 /* HELPERS */
@@ -146,13 +140,11 @@ const style = eventObj => {
 const getEventHandler = eventObj => {
   switch (eventObj.event) {
     case EVENTS.CLICK: {
-      eventObj.eventHandler = click(eventObj);
-      return eventObj;
+      return click(eventObj);
     }
 
     case EVENTS.STYLE: {
-      eventObj.eventHandler = style(eventObj);
-      return eventObj;
+      return style(eventObj);
     }
     default: {
       return eventObj;
@@ -193,36 +185,33 @@ const createEventsToRepeat = (eventAcc, currEvent) => {
 
 const addRepeatedEvents = reduceToNewArr(createEventsToRepeat);
 
-const createEvent = compose(
+const handleEvent = compose(
   getEventHandler,
   selectElement
 );
 
-const delayEvent = thunk(createEvent);
+const delayedEvent = thunk(handleEvent);
 
 const getExecutionMode = eventObj => {
-  const timeoutTrigger = timeout(eventObj.timeout);
-  const intervalTrigger = interval(eventObj.value);
+  const timeoutTrigger = compose(
+    timeout(eventObj.timeout),
+    delayedEvent
+  );
+
+  const intervalTrigger = compose(
+    interval(eventObj.value),
+    delayedEvent
+  );
 
   if (eventObj.mode === EXECUTION_MODE.ONCE) {
-    eventObj.trigger = thunk(timeoutTrigger)(eventObj.eventHandler);
+    eventObj.trigger = thunk(timeoutTrigger)(eventObj);
   } else if (eventObj.mode === EXECUTION_MODE.INTERVAL) {
-    eventObj.trigger = thunk(intervalTrigger)(eventObj.eventHandler);
+    eventObj.trigger = thunk(intervalTrigger)(eventObj);
   }
-
-  console.log(eventObj);
-
   return eventObj;
 };
 
-const createDelayedEvent = thunk(
-  compose(
-    getExecutionMode,
-    delayEvent
-  )
-);
-
-const createEventList = map(createDelayedEvent);
+const createEventList = map(getExecutionMode);
 
 const aggregateTimeout = (eventAcc, currEvent) => {
   const lastEl = getTail(eventAcc);
@@ -262,8 +251,6 @@ if (storedData) {
   console.log(eventQueue);
   eventQueue.forEach(eventObj => {
     console.log(eventObj);
-    const unwrap = eventObj()();
-    console.log(unwrap);
+    eventObj.trigger();
   });
-  // runEach(eventQueue);
 }
