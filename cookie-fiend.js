@@ -1,4 +1,4 @@
-console.log("reject cookies goal loaded");
+console.log("COOKIE_FIEND");
 
 const COOKIE_FIEND = "COOKIE_FIEND";
 
@@ -20,38 +20,30 @@ const data = [
     event: "click",
     name: "open settings",
     selector: "#qc-cmp-purpose-button",
-    timeout: 750,
+    timeout: 500,
     mode: EXECUTION_MODE.ONCE,
     value: null
   },
-  // {
-  //   position: 1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "reject cookies",
-  //   selector: "button.qc-cmp-button:nth-child(1)",
-  //   timeout: 1000,
-  //   mode: EXECUTION_MODE.ONCE
-  // },
   {
     position: 1,
     repeat: 0,
     event: "click",
-    name: "reject storage access",
-    selector:
-      "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
-    timeout: 1000,
-    mode: EXECUTION_MODE.INTERVAL,
-    value: 1000
+    name: "reject cookies",
+    selector: "button.qc-cmp-button:nth-child(1)",
+    timeout: 0,
+    mode: EXECUTION_MODE.ONCE,
+    value: null
+  },
+  {
+    position: 2,
+    repeat: 0,
+    event: "click",
+    name: "save",
+    selector: ".qc-cmp-save-and-exit",
+    timeout: 0,
+    mode: EXECUTION_MODE.ONCE,
+    value: null
   }
-  // {
-  //   position: 2,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "save",
-  //   selector: ".qc-cmp-save-and-exit",
-  //   timeout: 50
-  // }
 ];
 
 /* HELPERS */
@@ -155,10 +147,13 @@ const createEventThunk = thunk(createEvent);
 
 const getExecutionMode = event => func => {
   if (event.mode === EXECUTION_MODE.ONCE) {
+    console.log(event.name);
+    console.log(event.timeout);
     return timeout(event.timeout)(func);
   } else if (event.mode === EXECUTION_MODE.INTERVAL) {
     return interval(event.value)(func);
   }
+  return timeout(event.timeout)(func);
 };
 
 const applyExecutionMode = event =>
@@ -171,10 +166,9 @@ const delayEvent = thunk(applyExecutionMode);
 const createEventList = map(delayEvent);
 
 const aggregateTimeout = (eventAcc, currEvent) => {
-  if (eventAcc.length > 1) {
-    const lastEl = getTail(eventAcc);
-    currEvent.timeout += lastEl ? lastEl.timeout : 0;
-  }
+  const lastEl = getTail(eventAcc);
+  currEvent.timeout += lastEl ? lastEl.timeout : 0;
+
   eventAcc.push(currEvent);
   return eventAcc;
 };
@@ -200,7 +194,11 @@ const events = compose(
 
 const storedData = readLocalStorage();
 
-if (data) {
+if (storedData) {
+  const eventQueue = events(storedData);
+  console.log(eventQueue);
+  runEach(eventQueue);
+} else if (data) {
   const eventQueue = events(data);
   console.log(eventQueue);
   runEach(eventQueue);
