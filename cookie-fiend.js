@@ -17,33 +17,72 @@ const data = [
   {
     position: 0,
     repeat: 0,
+    event: "style",
+    name: "white header",
+    selector: ".widget-header__wrapper",
+    timeout: 1000,
+    mode: "once",
+    value: {
+      "background-color": "white"
+    },
+    selectedElement: null,
+    eventHandler: null,
+    trigger: null
+  },
+  {
+    position: 0.1,
+    repeat: 0,
     event: "click",
     name: "open settings",
     selector: "#qc-cmp-purpose-button",
     timeout: 500,
-    mode: EXECUTION_MODE.ONCE,
-    value: null
+    mode: "once",
+    value: null,
+    selectedElement: null,
+    eventHandler: null,
+    trigger: null
   },
   {
     position: 1,
     repeat: 0,
     event: "click",
-    name: "reject cookies",
-    selector: "button.qc-cmp-button:nth-child(1)",
-    timeout: 0,
-    mode: EXECUTION_MODE.ONCE,
-    value: null
-  },
-  {
-    position: 2,
-    repeat: 0,
-    event: "click",
-    name: "save",
-    selector: ".qc-cmp-save-and-exit",
-    timeout: 0,
-    mode: EXECUTION_MODE.ONCE,
-    value: null
+    name: "reject storage access",
+    selector:
+      "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
+    timeout: 1000,
+    mode: EXECUTION_MODE.INTERVAL,
+    value: 1000,
+    value: null,
+    selectedElement: null,
+    eventHandler: null,
+    trigger: null
   }
+  // {
+  //   position: 1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "reject cookies",
+  //   selector: "button.qc-cmp-button:nth-child(1)",
+  //   timeout: 0,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   eventHandler: null,
+  //   trigger: null
+  // },
+  // {
+  //   position: 2,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "save",
+  //   selector: ".qc-cmp-save-and-exit",
+  //   timeout: 0,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   eventHandler: null,
+  //   trigger: null
+  // }
 ];
 
 /* HELPERS */
@@ -59,7 +98,6 @@ const reduceToNewArr = func => data => data.reduce(func, []);
 const timeout = time => func => setTimeout(func, time);
 const interval = time => func => setInterval(func, time);
 const thunk = func => data => () => func(data);
-const applyArg = data => func => func(data);
 
 const run = func => func();
 const runEach = forEach(run);
@@ -71,34 +109,53 @@ const copy = compose(
 
 /* EVENT HANDLERS */
 
-const selectElement = name => selector => {
-  const element = $(selector);
+const selectElement = eventObj => {
+  const element = $(eventObj.selector);
   if (element) {
-    console.log("selected", name);
-    return element;
+    console.log("selected", eventObj.name);
+    eventObj.selectedElement = element;
+    return eventObj;
   }
-  console.log("select failed", name);
-  return null;
+  console.log("select failed", eventObj.name);
+  return eventObj;
 };
 
-const click = element => name => {
-  if (element) {
-    element.click();
-    console.log("clicked", name);
-    return true;
+const click = eventObj => {
+  if (eventObj.selectedElement) {
+    eventObj.selectedElement.click();
+    console.log("clicked", eventObj.name);
+    return eventObj;
   }
-  console.log("click failed", name);
-  return false;
+  console.log("click failed", eventObj.name);
+  return eventObj;
 };
 
-const getEventHandler = eventType => element => {
-  switch (eventType) {
+const style = eventObj => {
+  if (eventObj.selectedElement) {
+    Object.keys(eventObj.value).forEach(cssProp => {
+      eventObj.selectedElement.style[cssProp] = eventObj.value[cssProp];
+    });
+
+    console.log("style", eventObj.name);
+    return eventObj;
+  }
+  console.log("style failed", eventObj.name);
+  return eventObj;
+};
+
+const getEventHandler = eventObj => {
+  switch (eventObj.event) {
     case EVENTS.CLICK: {
-      return click(element);
+      eventObj.eventHandler = click(eventObj);
+      return eventObj;
     }
 
+    case EVENTS.STYLE: {
+      eventObj.eventHandler = style(eventObj);
+      return eventObj;
+    }
     default: {
-      return null;
+      return eventObj;
     }
   }
 };
@@ -136,34 +193,36 @@ const createEventsToRepeat = (eventAcc, currEvent) => {
 
 const addRepeatedEvents = reduceToNewArr(createEventsToRepeat);
 
-const createEvent = eventObj =>
-  compose(
-    applyArg(eventObj.name),
-    getEventHandler(eventObj.event),
-    selectElement(eventObj.name)
-  )(eventObj.selector);
+const createEvent = compose(
+  getEventHandler,
+  selectElement
+);
 
-const createEventThunk = thunk(createEvent);
+const delayEvent = thunk(createEvent);
 
-const getExecutionMode = event => func => {
-  if (event.mode === EXECUTION_MODE.ONCE) {
-    console.log(event.name);
-    console.log(event.timeout);
-    return timeout(event.timeout)(func);
-  } else if (event.mode === EXECUTION_MODE.INTERVAL) {
-    return interval(event.value)(func);
+const getExecutionMode = eventObj => {
+  const timeoutTrigger = timeout(eventObj.timeout);
+  const intervalTrigger = interval(eventObj.value);
+
+  if (eventObj.mode === EXECUTION_MODE.ONCE) {
+    eventObj.trigger = thunk(timeoutTrigger)(eventObj.eventHandler);
+  } else if (eventObj.mode === EXECUTION_MODE.INTERVAL) {
+    eventObj.trigger = thunk(intervalTrigger)(eventObj.eventHandler);
   }
-  return timeout(event.timeout)(func);
+
+  console.log(eventObj);
+
+  return eventObj;
 };
 
-const applyExecutionMode = event =>
+const createDelayedEvent = thunk(
   compose(
-    getExecutionMode(event),
-    createEventThunk
-  )(event);
+    getExecutionMode,
+    delayEvent
+  )
+);
 
-const delayEvent = thunk(applyExecutionMode);
-const createEventList = map(delayEvent);
+const createEventList = map(createDelayedEvent);
 
 const aggregateTimeout = (eventAcc, currEvent) => {
   const lastEl = getTail(eventAcc);
@@ -201,5 +260,10 @@ if (storedData) {
 } else if (data) {
   const eventQueue = events(data);
   console.log(eventQueue);
-  runEach(eventQueue);
+  eventQueue.forEach(eventObj => {
+    console.log(eventObj);
+    const unwrap = eventObj()();
+    console.log(unwrap);
+  });
+  // runEach(eventQueue);
 }
