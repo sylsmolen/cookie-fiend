@@ -28,18 +28,18 @@ const data = [
     selectedElement: null,
     trigger: null
   },
-  // {
-  //   position: 0.1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "open settings",
-  //   selector: "#qc-cmp-purpose-button",
-  //   timeout: 1000,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   trigger: null
-  // },
+  {
+    position: 0.1,
+    repeat: 0,
+    event: "click",
+    name: "open settings",
+    selector: "#qc-cmp-purpose-button",
+    timeout: 1000,
+    mode: "once",
+    value: null,
+    selectedElement: null,
+    trigger: null
+  },
   {
     position: 1,
     repeat: 0,
@@ -52,31 +52,31 @@ const data = [
     value: 1000,
     selectedElement: null,
     trigger: null
-  },
-  {
-    position: 1,
-    repeat: 0,
-    event: "click",
-    name: "reject cookies",
-    selector: "button.qc-cmp-button:nth-child(1)",
-    timeout: 0,
-    mode: "once",
-    value: null,
-    selectedElement: null,
-    trigger: null
-  },
-  {
-    position: 2,
-    repeat: 0,
-    event: "click",
-    name: "save",
-    selector: ".qc-cmp-save-and-exit",
-    timeout: 0,
-    mode: "once",
-    value: null,
-    selectedElement: null,
-    trigger: null
   }
+  // {
+  //   position: 1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "reject cookies",
+  //   selector: "button.qc-cmp-button:nth-child(1)",
+  //   timeout: 0,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   trigger: null
+  // },
+  // {
+  //   position: 2,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "save",
+  //   selector: ".qc-cmp-save-and-exit",
+  //   timeout: 0,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   trigger: null
+  // }
 ];
 
 /* HELPERS */
@@ -85,7 +85,12 @@ const log = el => (console.log(el), el);
 const compose = (...fns) => (...args) =>
   fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
 
+const getProp = prop => obj => obj[prop];
 const map = func => data => data.map(func);
+const mapTo = compose(
+  map,
+  getProp
+);
 const forEach = func => data => data.forEach(func);
 const reduceToNewArr = func => data => data.reduce(func, []);
 
@@ -233,7 +238,7 @@ const readLocalStorage = () =>
 
 /* MAIN */
 
-const events = compose(
+const getEvents = compose(
   createEventList,
   calcTimeout,
   sortEvents,
@@ -242,15 +247,26 @@ const events = compose(
 
 const storedData = readLocalStorage();
 
-if (storedData) {
-  const eventQueue = events(storedData);
-  console.log(eventQueue);
-  runEach(eventQueue);
-} else if (data) {
-  const eventQueue = events(data);
-  console.log(eventQueue);
-  eventQueue.forEach(eventObj => {
-    console.log(eventObj);
-    eventObj.trigger();
-  });
-}
+const mapToTriggerList = mapTo("trigger");
+
+const getEventQueue = compose(
+  mapToTriggerList,
+  getEvents
+);
+
+const runEventQueue = compose(
+  runEach,
+  getEventQueue
+);
+
+const getData = () => storedData || data;
+
+const runCookieFiend = compose(
+  runEventQueue,
+  getData
+);
+
+const eventQueue = getEventQueue(data);
+console.log(eventQueue);
+
+runCookieFiend();
