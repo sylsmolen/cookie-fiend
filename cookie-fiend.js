@@ -34,7 +34,7 @@ const data = [
     event: "click",
     name: "open settings",
     selector: "#qc-cmp-purpose-button",
-    timeout: 1000,
+    timeout: 900,
     mode: "once",
     value: null,
     selectedElement: null,
@@ -47,7 +47,7 @@ const data = [
     name: "reject storage access",
     selector:
       "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
-    timeout: 1000,
+    timeout: 1300,
     mode: EXECUTION_MODE.INTERVAL,
     value: 1000,
     selectedElement: null,
@@ -95,11 +95,24 @@ const forEach = func => data => data.forEach(func);
 const reduceToNewArr = func => data => data.reduce(func, []);
 
 const timeout = time => func => setTimeout(func, time);
+
+const promiseCallback = (time, func) => resolve => {
+  setTimeout(() => {
+    console.log(time);
+    console.log("yo");
+    func();
+    resolve();
+  }, time);
+};
+
+const timeoutPromise = time => func => new Promise(promiseCallback(time, func));
+
 const interval = time => func => setInterval(func, time);
 const thunk = func => data => () => func(data);
 
 const run = func => func();
-const runEach = forEach(run);
+const runAsync = async func => await func();
+const runEachAsync = forEach(runAsync);
 const getTail = arr => arr[arr.length - 1];
 const copy = compose(
   JSON.parse,
@@ -199,7 +212,7 @@ const delayedEvent = thunk(handleEvent);
 
 const getExecutionMode = eventObj => {
   const timeoutTrigger = compose(
-    timeout(eventObj.timeout),
+    timeoutPromise(eventObj.timeout),
     delayedEvent
   );
 
@@ -218,16 +231,6 @@ const getExecutionMode = eventObj => {
 
 const createEventList = map(getExecutionMode);
 
-const aggregateTimeout = (eventAcc, currEvent) => {
-  const lastEl = getTail(eventAcc);
-  currEvent.timeout += lastEl ? lastEl.timeout : 0;
-
-  eventAcc.push(currEvent);
-  return eventAcc;
-};
-
-const calcTimeout = reduceToNewArr(aggregateTimeout);
-
 /* LOCAL STORAGE */
 
 const setLocalStorage = data =>
@@ -240,7 +243,6 @@ const readLocalStorage = () =>
 
 const getEvents = compose(
   createEventList,
-  calcTimeout,
   sortEvents,
   addRepeatedEvents
 );
@@ -254,8 +256,15 @@ const getEventQueue = compose(
   getEvents
 );
 
+const reduceAsync = async eventQueue => {
+  await eventQueue.reduce(async (promise, eventPromise) => {
+    await promise;
+    await eventPromise();
+  }, Promise.resolve());
+};
+
 const runEventQueue = compose(
-  runEach,
+  reduceAsync,
   getEventQueue
 );
 
@@ -267,6 +276,4 @@ const runCookieFiend = compose(
 );
 
 const eventQueue = getEventQueue(data);
-console.log(eventQueue);
-
 runCookieFiend();
