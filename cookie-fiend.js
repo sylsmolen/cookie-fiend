@@ -21,7 +21,7 @@ const data = [
     event: "style",
     name: "white header",
     selector: ".widget-header__wrapper",
-    timeout: 10,
+    timeout: 1200,
     mode: "once",
     value: {
       "background-color": "white"
@@ -35,17 +35,35 @@ const data = [
     event: "eval",
     name: "append blue square",
     selector: "body",
-    timeout: 1000,
-    mode: "once",
+    timeout: 0,
+    mode: "interval",
+    modeParam: 1000,
     value: `const el = $('#qcCmpUi')
 const square = document.createElement("div")
+square.classList.add("blue-square");
 square.style.width = '50px'
 square.style.height = '50px'
 square.style['background-color'] = 'blue'
 el.appendChild(square)`,
     selectedElement: null,
     trigger: null
+  },
+  {
+    position: 2,
+    repeat: 0,
+    event: "style",
+    name: "3 square red",
+    selector: "div.blue-square:nth-child(7)",
+    timeout: 0,
+    mode: "on load",
+    modeParam: "div.blue-square:nth-child(7)",
+    value: {
+      "background-color": "red"
+    },
+    selectedElement: null,
+    trigger: null
   }
+
   // {
   //   position: 0.1,
   //   repeat: 0,
@@ -67,7 +85,8 @@ el.appendChild(square)`,
   //     "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
   //   timeout: 1300,
   //   mode: EXECUTION_MODE.INTERVAL,
-  //   value: 1000,
+  //   modeParam: 1000
+  //   value: null,
   //   selectedElement: null,
   //   trigger: null
   // }
@@ -114,6 +133,8 @@ const forEach = func => data => data.forEach(func);
 const runEach = forEach(run);
 const reduceToNewArr = func => data => data.reduce(func, []);
 const timeout = time => func => setTimeout(func, time);
+const interval = time => func => setInterval(func, time);
+const thunk = func => data => () => func(data);
 
 const runAndResolve = func => resolve =>
   compose(
@@ -121,11 +142,27 @@ const runAndResolve = func => resolve =>
     func
   );
 
+const resolveOnLoad = (elementToLoad, func) => resolve => {
+  if ($(elementToLoad)) {
+    return runAndResolve(func)(resolve);
+  }
+};
+
 const createTimeoutCallback = (time, func) =>
   compose(
     timeout(time),
     runAndResolve(func)
   );
+
+const createOnLoadCallback = (elementToLoad, func) => resolve => {
+  console.log(elementToLoad);
+  const hasElement = elementToLoad => () => Boolean($(elementToLoad));
+  const logHasElement = compose(
+    log,
+    hasElement
+  );
+  interval(500)(logHasElement);
+};
 
 const createPromise = callback => new Promise(callback);
 
@@ -136,8 +173,20 @@ const createTimeoutPromise = compose(
 
 const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 
-const interval = time => func => setInterval(func, time);
-const thunk = func => data => () => func(data);
+const createTimeoutPromise = compose(
+  createPromise,
+  createTimeoutCallback
+);
+
+const createOnLoadPromise = compose(
+  createPromise,
+  createOnLoadCallback
+);
+
+const getOnLoadPromise = elementToLoad => func => {
+  console.log(elementToLoad);
+  return createOnLoadPromise(elementToLoad, func);
+};
 
 const getTail = arr => arr[arr.length - 1];
 const copy = compose(
@@ -256,16 +305,34 @@ const getExecutionMode = eventObj => {
   );
 
   const intervalTrigger = compose(
-    interval(eventObj.value),
+    interval(eventObj.modeParam),
     delayedEvent
   );
 
-  if (eventObj.mode === EXECUTION_MODE.ONCE) {
-    eventObj.trigger = thunk(timeoutTrigger)(eventObj);
-  } else if (eventObj.mode === EXECUTION_MODE.INTERVAL) {
-    eventObj.trigger = thunk(intervalTrigger)(eventObj);
+  const onLoadTrigger = compose(
+    getOnLoadPromise(eventObj.modeParam),
+    delayedEvent
+  );
+
+  switch (eventObj.mode) {
+    case EXECUTION_MODE.ONCE: {
+      eventObj.trigger = thunk(timeoutTrigger)(eventObj);
+      return eventObj;
+    }
+
+    case EXECUTION_MODE.INTERVAL: {
+      eventObj.trigger = thunk(intervalTrigger)(eventObj);
+      return eventObj;
+    }
+
+    case EXECUTION_MODE.ON_LOAD: {
+      eventObj.trigger = thunk(onLoadTrigger)(eventObj);
+      return eventObj;
+    }
+
+    default:
+      return eventObj;
   }
-  return eventObj;
 };
 
 const createEventList = map(getExecutionMode);
