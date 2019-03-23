@@ -4,7 +4,8 @@ const COOKIE_FIEND = "COOKIE_FIEND";
 
 const EVENTS = {
   CLICK: "click",
-  STYLE: "style"
+  STYLE: "style",
+  EVAL: "eval"
 };
 
 const EXECUTION_MODE = {
@@ -20,7 +21,7 @@ const data = [
     event: "style",
     name: "white header",
     selector: ".widget-header__wrapper",
-    timeout: 1000,
+    timeout: 10,
     mode: "once",
     value: {
       "background-color": "white"
@@ -29,49 +30,66 @@ const data = [
     trigger: null
   },
   {
-    position: 0.1,
+    position: 0.05,
     repeat: 0,
-    event: "click",
-    name: "open settings",
-    selector: "#qc-cmp-purpose-button",
-    timeout: 900,
+    event: "eval",
+    name: "append blue square",
+    selector: "body",
+    timeout: 1000,
     mode: "once",
-    value: null,
-    selectedElement: null,
-    trigger: null
-  },
-  {
-    position: 1,
-    repeat: 0,
-    event: "click",
-    name: "reject storage access",
-    selector:
-      "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
-    timeout: 1300,
-    mode: EXECUTION_MODE.INTERVAL,
-    value: 1000,
+    value: `const el = $('#qcCmpUi')
+const square = document.createElement("div")
+square.style.width = '50px'
+square.style.height = '50px'
+square.style['background-color'] = 'blue'
+el.appendChild(square)`,
     selectedElement: null,
     trigger: null
   }
   // {
-  //   position: 1,
+  //   position: 0.1,
   //   repeat: 0,
   //   event: "click",
-  //   name: "reject cookies",
-  //   selector: "button.qc-cmp-button:nth-child(1)",
-  //   timeout: 0,
+  //   name: "open settings",
+  //   selector: "#qc-cmp-purpose-button",
+  //   timeout: 900,
   //   mode: "once",
   //   value: null,
   //   selectedElement: null,
   //   trigger: null
   // },
   // {
+  //   position: 1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "reject storage access",
+  //   selector:
+  //     "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
+  //   timeout: 1300,
+  //   mode: EXECUTION_MODE.INTERVAL,
+  //   value: 1000,
+  //   selectedElement: null,
+  //   trigger: null
+  // }
+  // {
+  //   position: 1,
+  //   repeat: 0,
+  //   event: "click",
+  //   name: "reject cookies",
+  //   selector: "button.qc-cmp-button:nth-child(1)",
+  //   timeout: 1100,
+  //   mode: "once",
+  //   value: null,
+  //   selectedElement: null,
+  //   trigger: null
+  // }
+  // {
   //   position: 2,
   //   repeat: 0,
   //   event: "click",
   //   name: "save",
   //   selector: ".qc-cmp-save-and-exit",
-  //   timeout: 0,
+  //   timeout: 30,
   //   mode: "once",
   //   value: null,
   //   selectedElement: null,
@@ -91,28 +109,36 @@ const mapTo = compose(
   map,
   getProp
 );
+const run = func => func();
 const forEach = func => data => data.forEach(func);
+const runEach = forEach(run);
 const reduceToNewArr = func => data => data.reduce(func, []);
-
 const timeout = time => func => setTimeout(func, time);
 
-const promiseCallback = (time, func) => resolve => {
-  setTimeout(() => {
-    console.log(time);
-    console.log("yo");
-    func();
-    resolve();
-  }, time);
-};
+const runAndResolve = func => resolve =>
+  compose(
+    resolve,
+    func
+  );
 
-const timeoutPromise = time => func => new Promise(promiseCallback(time, func));
+const createTimeoutCallback = (time, func) =>
+  compose(
+    timeout(time),
+    runAndResolve(func)
+  );
+
+const createPromise = callback => new Promise(callback);
+
+const createTimeoutPromise = compose(
+  createPromise,
+  createTimeoutCallback
+);
+
+const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 
 const interval = time => func => setInterval(func, time);
 const thunk = func => data => () => func(data);
 
-const run = func => func();
-const runAsync = async func => await func();
-const runEachAsync = forEach(runAsync);
 const getTail = arr => arr[arr.length - 1];
 const copy = compose(
   JSON.parse,
@@ -155,6 +181,13 @@ const style = eventObj => {
   return eventObj;
 };
 
+const evalValue = eventObj => {
+  console.log("eval", eventObj.name);
+  eval(eventObj.value);
+
+  return eventObj;
+};
+
 const getEventHandler = eventObj => {
   switch (eventObj.event) {
     case EVENTS.CLICK: {
@@ -164,6 +197,12 @@ const getEventHandler = eventObj => {
     case EVENTS.STYLE: {
       return style(eventObj);
     }
+
+    case EVENTS.EVAL: {
+      console.log("eval event");
+      return evalValue(eventObj);
+    }
+
     default: {
       return eventObj;
     }
@@ -212,7 +251,7 @@ const delayedEvent = thunk(handleEvent);
 
 const getExecutionMode = eventObj => {
   const timeoutTrigger = compose(
-    timeoutPromise(eventObj.timeout),
+    getTimeoutPromise(eventObj.timeout),
     delayedEvent
   );
 
@@ -256,8 +295,8 @@ const getEventQueue = compose(
   getEvents
 );
 
-const reduceAsync = async eventQueue => {
-  await eventQueue.reduce(async (promise, eventPromise) => {
+const reduceAsync = eventQueue => {
+  eventQueue.reduce(async (promise, eventPromise) => {
     await promise;
     await eventPromise();
   }, Promise.resolve());
