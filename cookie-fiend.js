@@ -175,8 +175,10 @@ const createTimeoutPromise = compose(
 const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 
 const createOnLoadCallback = (elementToLoad, func) => resolve => {
+  console.log("wating for", elementToLoad);
   const intervalRef = setInterval(() => {
     if ($(elementToLoad)) {
+      console.log(elementToLoad, "found");
       clearInterval(intervalRef);
       resolve();
       func();
@@ -346,7 +348,6 @@ const getEvents = compose(
 );
 
 const storedData = readLocalStorage();
-console.log("LS data loaded", storedData);
 
 const mapToTriggerList = mapTo("trigger");
 
@@ -367,6 +368,7 @@ const runEventQueue = compose(
   getEventQueue
 );
 
+console.log("LS data loaded", storedData);
 const getData = () => storedData || data;
 
 const runCookieFiend = compose(
@@ -374,5 +376,4 @@ const runCookieFiend = compose(
   getData
 );
 
-const eventQueue = getEventQueue(data);
 runCookieFiend();
