@@ -14,107 +14,125 @@ const EXECUTION_MODE = {
   ON_LOAD: "on load"
 };
 
-const data = [
-  {
-    position: 0,
-    repeat: 0,
-    event: "style",
-    name: "white header",
-    selector: ".widget-header__wrapper",
-    timeout: 1200,
-    mode: "once",
-    value: {
-      "background-color": "white"
-    },
-    selectedElement: null,
-    trigger: null
-  },
-  {
-    position: 0.05,
-    repeat: 0,
-    event: "eval",
-    name: "append blue square",
-    selector: "body",
-    timeout: 0,
-    mode: "interval",
-    modeParam: 1000,
-    value: `const el = $('#qcCmpUi')
-const square = document.createElement("div")
-square.classList.add("blue-square");
-square.style.width = '50px'
-square.style.height = '50px'
-square.style['background-color'] = 'blue'
-el.appendChild(square)`,
-    selectedElement: null,
-    trigger: null
-  },
-  {
-    position: 2,
-    repeat: 0,
-    event: "style",
-    name: "3 square red",
-    selector: "div.blue-square:nth-child(7)",
-    timeout: 0,
-    mode: "on load",
-    modeParam: "div.blue-square:nth-child(7)",
-    value: {
-      "background-color": "red"
-    },
-    selectedElement: null,
-    trigger: null
-  }
+const data = [];
+// const data = [
+//   {
+//     position: 0,
+//     repeat: 0,
+//     event: "style",
+//     name: "cookie info box",
+//     selector: ".qc-cmp-initial-info",
+//     timeout: 0,
+//     mode: "on load",
+//     modeParam: ".qc-cmp-initial-info",
+//     value: {
+//       "background-color": "red"
+//     },
+//     selectedElement: null,
+//     trigger: null
+//   },
+// {
+//   position: 0,
+//   repeat: 0,
+//   event: "style",
+//   name: "white header",
+//   selector: ".widget-header__wrapper",
+//   timeout: 1200,
+//   mode: "once",
+//   value: {
+//     "background-color": "white"
+//   },
+//   selectedElement: null,
+//   trigger: null
+// }
+//   {
+//     position: 0.05,
+//     repeat: 0,
+//     event: "eval",
+//     name: "append blue square",
+//     selector: "body",
+//     timeout: 0,
+//     mode: "interval",
+//     modeParam: 1000,
+//     value: `const el = $('#qcCmpUi')
+// const square = document.createElement("div")
+// square.classList.add('test-square')
+// const color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+// square.style.width = '50px'
+// square.style.height = '50px'
+// square.style['background-color'] = color;
+// el.appendChild(square)`,
+//     selectedElement: null,
+//     trigger: null
+//   }
+// {
+//   position: 2,
+//   repeat: 0,
+//   event: "style",
+//   name: "3 square red",
+//   selector: "div.test-square:nth-child(7)",
+//   timeout: 0,
+//   mode: "on load",
+//   modeParam: "div.test-square:nth-child(7)",
+//   value: {
+//     "background-color": "red"
+//   },
+//   selectedElement: null,
+//   trigger: null
+// }
 
-  // {
-  //   position: 0.1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "open settings",
-  //   selector: "#qc-cmp-purpose-button",
-  //   timeout: 900,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   trigger: null
-  // },
-  // {
-  //   position: 1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "reject storage access",
-  //   selector:
-  //     "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
-  //   timeout: 1300,
-  //   mode: EXECUTION_MODE.INTERVAL,
-  //   modeParam: 1000
-  //   value: null,
-  //   selectedElement: null,
-  //   trigger: null
-  // }
-  // {
-  //   position: 1,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "reject cookies",
-  //   selector: "button.qc-cmp-button:nth-child(1)",
-  //   timeout: 1100,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   trigger: null
-  // }
-  // {
-  //   position: 2,
-  //   repeat: 0,
-  //   event: "click",
-  //   name: "save",
-  //   selector: ".qc-cmp-save-and-exit",
-  //   timeout: 30,
-  //   mode: "once",
-  //   value: null,
-  //   selectedElement: null,
-  //   trigger: null
-  // }
-];
+// {
+//   position: 0.1,
+//   repeat: 0,
+//   event: "click",
+//   name: "open settings",
+//   selector: "#qc-cmp-purpose-button",
+//   timeout: 0,
+//   mode: "once",
+//   value: null,
+//   selectedElement: null,
+//   trigger: null
+// },
+// {
+//   position: 1,
+//   repeat: 0,
+//   event: "click",
+//   name: "reject storage access",
+//   selector:
+//     "table.qc-cmp-table:nth-child(1) > tbody:nth-child(2) > tr:nth-child(1) > td:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > span:nth-child(1)",
+//   timeout: 1300,
+//   mode: EXECUTION_MODE.INTERVAL,
+//   modeParam: 1000
+//   value: null,
+//   selectedElement: null,
+//   trigger: null
+// }
+//   {
+//     position: 1,
+//     repeat: 0,
+//     event: "click",
+//     name: "reject cookies",
+//     selector: "button.qc-cmp-button:nth-child(1)",
+//     timeout: 0,
+//     mode: "once",
+//     value: null,
+//     selectedElement: null,
+//     trigger: null
+//   },
+//   {
+//     position: 2,
+//     repeat: 0,
+//     event: "click",
+//     name: "save",
+//     selector: ".qc-cmp-save-and-exit",
+//     timeout: 0,
+//     mode: "once",
+//     modeParam: "",
+//     value: null,
+//     selectedElement: null,
+//     trigger: null
+//   }
+// ];
 
 /* HELPERS */
 
@@ -142,27 +160,11 @@ const runAndResolve = func => resolve =>
     func
   );
 
-const resolveOnLoad = (elementToLoad, func) => resolve => {
-  if ($(elementToLoad)) {
-    return runAndResolve(func)(resolve);
-  }
-};
-
 const createTimeoutCallback = (time, func) =>
   compose(
     timeout(time),
     runAndResolve(func)
   );
-
-const createOnLoadCallback = (elementToLoad, func) => resolve => {
-  console.log(elementToLoad);
-  const hasElement = elementToLoad => () => Boolean($(elementToLoad));
-  const logHasElement = compose(
-    log,
-    hasElement
-  );
-  interval(500)(logHasElement);
-};
 
 const createPromise = callback => new Promise(callback);
 
@@ -173,20 +175,23 @@ const createTimeoutPromise = compose(
 
 const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 
-const createTimeoutPromise = compose(
-  createPromise,
-  createTimeoutCallback
-);
+const createOnLoadCallback = (elementToLoad, func) => resolve => {
+  const intervalRef = setInterval(() => {
+    if ($(elementToLoad)) {
+      clearInterval(intervalRef);
+      resolve();
+      func();
+    }
+  }, 500);
+};
 
 const createOnLoadPromise = compose(
   createPromise,
   createOnLoadCallback
 );
 
-const getOnLoadPromise = elementToLoad => func => {
-  console.log(elementToLoad);
-  return createOnLoadPromise(elementToLoad, func);
-};
+const getOnLoadPromise = elementToLoad => func =>
+  createOnLoadPromise(elementToLoad, func);
 
 const getTail = arr => arr[arr.length - 1];
 const copy = compose(
@@ -354,6 +359,7 @@ const getEvents = compose(
 );
 
 const storedData = readLocalStorage();
+console.log("LS data loaded", storedData);
 
 const mapToTriggerList = mapTo("trigger");
 
