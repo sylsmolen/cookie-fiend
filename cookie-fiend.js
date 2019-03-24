@@ -4,8 +4,7 @@ const COOKIE_FIEND = "COOKIE_FIEND";
 
 const EVENTS = {
   CLICK: "click",
-  STYLE: "style",
-  EVAL: "eval"
+  STYLE: "style"
 };
 
 const EXECUTION_MODE = {
@@ -235,13 +234,6 @@ const style = eventObj => {
   return eventObj;
 };
 
-const evalValue = eventObj => {
-  console.log("eval", eventObj.name);
-  eval(eventObj.value);
-
-  return eventObj;
-};
-
 const getEventHandler = eventObj => {
   switch (eventObj.event) {
     case EVENTS.CLICK: {
@@ -250,11 +242,6 @@ const getEventHandler = eventObj => {
 
     case EVENTS.STYLE: {
       return style(eventObj);
-    }
-
-    case EVENTS.EVAL: {
-      console.log("eval event");
-      return evalValue(eventObj);
     }
 
     default: {
