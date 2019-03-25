@@ -145,9 +145,7 @@ const mapTo = compose(
   map,
   getProp
 );
-const run = func => func();
 const forEach = func => data => data.forEach(func);
-const runEach = forEach(run);
 const reduceToNewArr = func => data => data.reduce(func, []);
 const timeout = time => func => setTimeout(func, time);
 const interval = time => func => setInterval(func, time);
@@ -175,7 +173,7 @@ const createTimeoutPromise = compose(
 const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 
 const createOnLoadCallback = (elementToLoad, func) => resolve => {
-  console.log("wating for", elementToLoad);
+  console.log("waiting for", elementToLoad);
   const intervalRef = setInterval(() => {
     if ($(elementToLoad)) {
       console.log(elementToLoad, "found");
