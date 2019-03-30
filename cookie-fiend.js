@@ -175,7 +175,7 @@ const getTimeoutPromise = time => func => createTimeoutPromise(time, func);
 const createOnLoadCallback = (elementToLoad, func) => resolve => {
   console.log("waiting for", elementToLoad);
   const intervalRef = setInterval(() => {
-    if ($(elementToLoad)) {
+    if (document.querySelector(elementToLoad)) {
       console.log(elementToLoad, "found");
       clearInterval(intervalRef);
       resolve();
@@ -201,7 +201,7 @@ const copy = compose(
 /* EVENT HANDLERS */
 
 const selectElement = eventObj => {
-  const element = $(eventObj.selector);
+  const element = document.querySelector(eventObj.selector);
   if (element) {
     console.log("selected", eventObj.name);
     eventObj.selectedElement = element;
@@ -331,11 +331,23 @@ const createEventList = map(getExecutionMode);
 
 /* LOCAL STORAGE */
 
-const setLocalStorage = data =>
-  window.localStorage.setItem(COOKIE_FIEND, JSON.stringify(data));
+const readLocalStorageAsync = () =>
+  browser.storage.sync.get("COOKIE_FIEND").then(getItem, onGetStorageError);
 
-const readLocalStorage = () =>
-  JSON.parse(window.localStorage.getItem(COOKIE_FIEND));
+const getItem = storageItem => {
+  try {
+    const rawConfig = JSON.parse(storageItem[COOKIE_FIEND]);
+    const eventConfig = JSON.parse(rawConfig);
+    console.log("eventConfig loaded", eventConfig);
+    return eventConfig;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const onGetStorageError = err => {
+  console.log("get sync storage error", err);
+};
 
 /* MAIN */
 
@@ -345,8 +357,6 @@ const getEvents = compose(
   addRepeatedEvents
 );
 
-const storedData = readLocalStorage();
-
 const mapToTriggerList = mapTo("trigger");
 
 const getEventQueue = compose(
@@ -354,24 +364,23 @@ const getEventQueue = compose(
   getEvents
 );
 
-const reduceAsync = eventQueue => {
+const reduceAsync = eventQueue =>
   eventQueue.reduce(async (promise, eventPromise) => {
     await promise;
     await eventPromise();
   }, Promise.resolve());
+
+const runEventQueue = async data => {
+  const awaitedData = await data;
+  return compose(
+    reduceAsync,
+    getEventQueue
+  )(awaitedData);
 };
-
-const runEventQueue = compose(
-  reduceAsync,
-  getEventQueue
-);
-
-console.log("LS data loaded", storedData);
-const getData = () => storedData || data;
 
 const runCookieFiend = compose(
   runEventQueue,
-  getData
+  readLocalStorageAsync
 );
 
 runCookieFiend();

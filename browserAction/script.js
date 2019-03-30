@@ -6,8 +6,14 @@ const setItem = () => {
   console.log("sync storage item set");
 };
 
-const getItem = storageItem => {
-  console.log("storage item: ", JSON.stringify(storageItem));
+const getItem = async storageItem => {
+  try {
+    const rawConfig = JSON.parse(storageItem[COOKIE_FIEND]);
+    const eventConfig = JSON.parse(rawConfig);
+    console.log(eventConfig);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const onSetStorageError = err => {
@@ -20,7 +26,9 @@ const onGetStorageError = err => {
 
 const setSyncStorage = value => {
   browser.storage.sync
-    .set({ [COOKIE_FIEND]: value })
+    .set({
+      [COOKIE_FIEND]: value
+    })
     .then(setItem, onSetStorageError);
 };
 
