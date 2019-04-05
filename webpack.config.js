@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const WebExtWebpackPlugin = require("web-ext-webpack-plugin");
 
 /*
@@ -81,9 +82,13 @@ module.exports = {
   plugins: [
     new WebExtWebpackPlugin({
       browserConsole: true,
-      startUrl: ["tests/playground.html"],
+      startUrl: ["www.goal.com"],
       sourceDir: path.resolve(__dirname, "build")
     }),
-    new webpack.SourceMapDevToolPlugin({})
+    new webpack.SourceMapDevToolPlugin({}),
+    new CopyWebpackPlugin([
+      { from: "src/browserAction/public", to: "browser_action/[name].[ext]" },
+      { from: "public", to: "" }
+    ])
   ]
 };

@@ -1,7 +1,8 @@
-console.log("yoyo");
+import "@babel/polyfill";
 import { test } from "./browserStorage";
 
 console.log(test);
+console.log("yoyo");
 
 const COOKIE_FIEND = "COOKIE_FIEND";
 

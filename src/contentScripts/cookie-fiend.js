@@ -1,3 +1,4 @@
+import "@babel/polyfill";
 console.log("COOKIE_FIEND");
 
 const COOKIE_FIEND = "COOKIE_FIEND";
