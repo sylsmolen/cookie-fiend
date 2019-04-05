@@ -64,7 +64,6 @@ const getSyncStorageAsync = key =>
 
 const getTextAreaFieldValue = () => {
   const textField = document.querySelector("#lsTxtArea");
-  console.log(textField);
   if (textField.value) {
     return textField.value;
   }
