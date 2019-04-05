@@ -1,0 +1,16 @@
+{
+  "name": "cookie-fiend",
+  "version": "0.0.2",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "left-pad": "^1.1.1"
+  }
+}

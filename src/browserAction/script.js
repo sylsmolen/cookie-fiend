@@ -1,7 +1,16 @@
+console.log(Components.utils.import);
 const COOKIE_FIEND = "COOKIE_FIEND";
 
 const compose = (...fns) => (...args) =>
   fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+const composePromise = (...functions) => initialValue =>
+  functions.reduceRight(
+    (sum, fn) => Promise.resolve(sum).then(fn),
+    initialValue
+  );
+
+const log = (...args) => console.log(...args);
 const logErr = txt => err => console.error(txt, err);
 const head = arr => arr[0];
 const getProp = prop => obj => obj[prop];
@@ -27,26 +36,25 @@ const getItem = key => async storageItem => {
     const eventConfig = parseTwice(storageItem[key]);
     console.log("eventConfig", eventConfig);
   } catch (err) {
+    console.log("raw result:", storageItem[key]);
     logErr("get item failed")(err);
   }
 };
 
-const setSyncStorage = valueThunk => async key => {
-  const unpacked = valueThunk();
-
-  console.log(unpacked);
+const setSyncStorageAsync = valueThunk => async key => {
+  const value = valueThunk();
   const res = await browser.storage.sync
     .set({
-      [key]: unpacked
+      [key]: value
     })
-    .then(inspect, logErr("set storage failed"));
-  console.log("res", res);
-  console.log("key", key);
-
+    .then(
+      log("storage saved", "key", key, "value", value),
+      logErr("set storage failed")
+    );
   return res;
 };
 
-const getSyncStorage = key =>
+const getSyncStorageAsync = key =>
   browser.storage.sync.get(key).then(getItem(key), logErr("getSyncStorage"));
 
 const getTextAreaFieldValue = () => {
@@ -58,14 +66,16 @@ const getTextAreaFieldValue = () => {
   return "";
 };
 
-const getUserInputAndSaveToStorage = setSyncStorage(getTextAreaFieldValue);
+const getUserInputAndSaveToStorageAsync = setSyncStorageAsync(
+  getTextAreaFieldValue
+);
 
 const activeTabQuery = window.browser.tabs.query({
   currentWindow: true,
   active: true
 });
 
-const getActiveTabUrl = async () => {
+const getActiveTabUrlAsync = async () => {
   const result = await activeTabQuery.then(
     head,
     logErr("couldn't get active tab")
@@ -93,22 +103,20 @@ const getDomainFromUrl = compose(
   setHrefOnLink
 );
 
-const setConfigForCurrentDomain = async () => {
-  const tabUrl = await getActiveTabUrl();
-  compose(
-    getUserInputAndSaveToStorage,
-    getStorageItemName,
-    getDomainFromUrl
-  )(tabUrl);
-};
-const getConfigForCurrentDomain = async () => {
-  const tabUrl = await getActiveTabUrl();
-  compose(
-    getSyncStorage,
-    getStorageItemName,
-    getDomainFromUrl
-  )(tabUrl);
-};
+const getStorageKeyAsync = composePromise(
+  getStorageItemName,
+  getDomainFromUrl,
+  getActiveTabUrlAsync
+);
+
+const setConfigForCurrentDomain = composePromise(
+  getUserInputAndSaveToStorageAsync,
+  getStorageKeyAsync
+);
+const getConfigForCurrentDomain = composePromise(
+  getSyncStorageAsync,
+  getStorageKeyAsync
+);
 
 /* EVENTS */
 
