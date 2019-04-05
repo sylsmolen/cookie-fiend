@@ -1,4 +1,8 @@
-console.log(Components.utils.import);
+console.log("yoyo");
+import { test } from "./browserStorage";
+
+console.log(test);
+
 const COOKIE_FIEND = "COOKIE_FIEND";
 
 const compose = (...fns) => (...args) =>

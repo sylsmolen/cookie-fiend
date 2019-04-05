@@ -7,26 +7,26 @@
     "64": "icons/icon.png"
   },
   "background": {
-    "scripts": ["background_script.js"]
+    "scripts": ["background_script/index.js"]
   },
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["cookie-fiend.js"]
+      "js": ["content_scripts/cookie-fiend.js"]
     }
   ],
   "browser_action": {
     "default_icon": {
       "64": "icons/icon.png"
     },
-    "default_popup": "browserAction/index.html",
+    "default_popup": "browser_action/index.html",
     "default_title": "cookie-fiend"
   },
   "page_action": {
     "default_icon": {
       "64": "icons/icon.png"
     },
-    "default_popup": "pageAction/index.html",
+    "default_popup": "page_action/index.html",
     "default_title": "cookie-fiend"
   },
   "options_ui": {
