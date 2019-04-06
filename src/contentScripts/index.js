@@ -1,7 +1,21 @@
 import '@babel/polyfill'
-console.log('COOKIE_FIEND')
+import {
+  compose,
+  composePromise,
+  timeout,
+  interval,
+  reduceToNewArr,
+  thunk,
+  map,
+  mapTo
+} from '../utils'
 
-const COOKIE_FIEND = 'COOKIE_FIEND'
+import {
+  getSyncStorageAsync,
+  getStorageKeyAsync
+} from '../shared/browserStorage'
+
+console.log('COOKIE_FIEND contents script')
 
 const EVENTS = {
   CLICK: 'click',
@@ -15,22 +29,6 @@ const EXECUTION_MODE = {
 }
 
 /* HELPERS */
-
-const log = el => (console.log(el), el)
-const compose = (...fns) => (...args) =>
-  fns.reduceRight((res, fn) => [fn(...res)], args)[0]
-
-const getProp = prop => obj => obj[prop]
-const map = func => data => data.map(func)
-const mapTo = compose(
-  map,
-  getProp
-)
-const forEach = func => data => data.forEach(func)
-const reduceToNewArr = func => data => data.reduce(func, [])
-const timeout = time => func => setTimeout(func, time)
-const interval = time => func => setInterval(func, time)
-const thunk = func => data => () => func(data)
 
 const runAndResolve = func => resolve =>
   compose(
@@ -72,12 +70,6 @@ const createOnLoadPromise = compose(
 
 const getOnLoadPromise = elementToLoad => func =>
   createOnLoadPromise(elementToLoad, func)
-
-const getTail = arr => arr[arr.length - 1]
-const copy = compose(
-  JSON.parse,
-  JSON.stringify
-)
 
 /* EVENT HANDLERS */
 
@@ -210,28 +202,6 @@ const getExecutionMode = eventObj => {
 
 const createEventList = map(getExecutionMode)
 
-/* LOCAL STORAGE */
-
-const readLocalStorageAsync = () =>
-  window.browser.storage.sync
-    .get('COOKIE_FIEND')
-    .then(getItem, onGetStorageError)
-
-const getItem = storageItem => {
-  try {
-    const rawConfig = JSON.parse(storageItem[COOKIE_FIEND])
-    const eventConfig = JSON.parse(rawConfig)
-    console.log('eventConfig loaded', eventConfig)
-    return eventConfig
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-const onGetStorageError = err => {
-  console.log('get sync storage error', err)
-}
-
 /* MAIN */
 
 const getEvents = compose(
@@ -261,9 +231,14 @@ const runEventQueue = async data => {
   )(awaitedData)
 }
 
-const runCookieFiend = compose(
+const getConfigForCurrentDomainAsync = composePromise(
+  getSyncStorageAsync,
+  getStorageKeyAsync
+)
+
+const runCookieFiend = composePromise(
   runEventQueue,
-  readLocalStorageAsync
+  getConfigForCurrentDomainAsync
 )
 
 runCookieFiend()
