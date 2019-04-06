@@ -30,9 +30,9 @@ module.exports = {
 
   entry: {
     content_scripts: './src/contentScripts/index.js',
+    background_scripts: './src/backgroundScripts/index.js',
     browser_action: './src/browserAction/index.js'
   },
-
   output: {
     filename: '[name]/index.js',
     path: path.resolve(__dirname, 'build')
