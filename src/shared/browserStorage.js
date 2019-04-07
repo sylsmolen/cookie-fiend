@@ -1,51 +1,22 @@
 import { COOKIE_FIEND } from '../data/constants'
-import { log, logErr, getProp, head, compose, composePromise } from '../utils'
+import { log, logErr, compose, composePromise } from '../utils'
+import { getActiveTabUrlAsync } from './tabs'
 
 const getStorageItemName = domain => `${COOKIE_FIEND}::${domain}`
-const createLinkElement = window.document.createElement('a')
 const parseTwice = compose(
   JSON.parse,
   JSON.parse
 )
 
-const setAttribute = attr => element => value => {
-  element.setAttribute(attr, value)
-  return element
-}
-
-const setHref = setAttribute('href')
-const setHrefOnLink = setHref(createLinkElement)
-
-const getDomainFromUrl = compose(
-  getProp('hostname'),
-  setHrefOnLink
-)
-
 const getItem = key => async storageItem => {
   try {
     const eventConfig = parseTwice(storageItem[key])
-    console.log('eventConfig', eventConfig)
+    console.log('eventConfig loaded from browser storage', eventConfig)
+    return eventConfig
   } catch (err) {
     console.log('raw result:', storageItem[key])
     logErr('get item failed')(err)
   }
-}
-
-const activeTabQuery = window.browser.tabs.query({
-  currentWindow: true,
-  active: true
-})
-
-const getActiveTabUrlAsync = async () => {
-  const result = await activeTabQuery.then(
-    head,
-    logErr("couldn't get active tab")
-  )
-
-  if (result && result.hasOwnProperty('url')) {
-    return result.url
-  }
-  return result
 }
 
 export const setSyncStorageAsync = valueThunk => async key => {
@@ -66,8 +37,12 @@ export const getSyncStorageAsync = key =>
     .get(key)
     .then(getItem(key), logErr('getSyncStorage'))
 
-export const getStorageKeyAsync = composePromise(
+export const getStorageKeyFromTabAsync = composePromise(
   getStorageItemName,
-  getDomainFromUrl,
   getActiveTabUrlAsync
+)
+
+export const getSyncStorageByUrlAsync = composePromise(
+  getSyncStorageAsync,
+  getStorageItemName
 )

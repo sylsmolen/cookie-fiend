@@ -3,7 +3,7 @@ import { composePromise } from '../utils'
 import {
   setSyncStorageAsync,
   getSyncStorageAsync,
-  getStorageKeyAsync
+  getStorageKeyFromTabAsync
 } from '../shared/browserStorage'
 
 const getTextAreaFieldValue = () => {
@@ -20,12 +20,12 @@ const getUserInputAndSaveToStorageAsync = setSyncStorageAsync(
 
 const setConfigForCurrentDomain = composePromise(
   getUserInputAndSaveToStorageAsync,
-  getStorageKeyAsync
+  getStorageKeyFromTabAsync
 )
 
 const getConfigForCurrentDomain = composePromise(
   getSyncStorageAsync,
-  getStorageKeyAsync
+  getStorageKeyFromTabAsync
 )
 
 /* EVENTS */

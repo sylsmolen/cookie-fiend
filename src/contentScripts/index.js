@@ -1,29 +1,24 @@
 import '@babel/polyfill'
+import {
+  compose,
+  composePromise,
+  timeout,
+  interval,
+  reduceToNewArr,
+  thunk,
+  map,
+  mapTo
+} from '../utils'
+
+console.log('hello from the content script')
 
 const listener = (msg, sender) => {
-  console.log(msg)
-  console.log(sender)
+  console.log('msg', JSON.stringify(msg))
+  console.log('sender', JSON.stringify(sender))
 }
 
 browser.runtime.onMessage.addListener(listener)
 
-// import '@babel/polyfill'
-// import {
-//   compose,
-//   composePromise,
-//   timeout,
-//   interval,
-//   reduceToNewArr,
-//   thunk,
-//   map,
-//   mapTo
-// } from '../utils'
-//
-// import {
-//   getSyncStorageAsync,
-//   getStorageKeyAsync
-// } from '../shared/browserStorage'
-//
 // console.log('COOKIE_FIEND contents script')
 //
 // const EVENTS = {
