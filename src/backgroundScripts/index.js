@@ -1,33 +1,22 @@
 import '@babel/polyfill'
 import { getActiveTabAsync } from '../shared/tabs'
-import { getSyncStorageByUrlAsync } from '../shared/browserStorage'
-import { getProp, composePromise } from '../utils'
+import { composePromise } from '../utils'
 console.log('hello from the barckround script')
 
-const getConfigFromStorage = composePromise(
-  getSyncStorageByUrlAsync,
-  getProp('url')
-)
+var executeContentScript = tab =>
+  browser.tabs.executeScript(tab.id, {
+    file: '/content_scripts/index.js'
+  })
 
-const sendMessageToTabAsync = async tab => {
-  console.log(tab)
-  const config = await getConfigFromStorage(tab)
-
-  console.log('config', config)
-  return window.browser.tabs
-    .sendMessage(tab.id, config)
-    .catch(err => console.error(err))
-}
+const run = composePromise(executeContentScript, getActiveTabAsync)
 
 const onTabUpdated = async (tabId, changeInfo, tab) => {
   if (changeInfo.url) {
     console.log('url change', changeInfo.url)
-    const res = await sendMessageToTabAsync(tab)
-    console.log('message res', res)
+    executeContentScript(tab)
   }
 }
 
 browser.tabs.onUpdated.addListener(onTabUpdated)
 
-// on load
-composePromise(sendMessageToTabAsync, getActiveTabAsync)()
+run()

@@ -2,14 +2,14 @@
   "manifest_version": 2,
   "name": "cookie-fiend",
   "description": "description",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icons": {
     "64": "icons/icon.png"
   },
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["content_scripts/index.js"]
+      "js": []
     }
   ],
   "background": {
@@ -22,7 +22,7 @@
     "default_popup": "browser_action/index.html",
     "default_title": "cookie-fiend"
   },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "<all_urls>", "tabs"],
   "browser_specific_settings": {
     "gecko": {
       "id": "{daf44bf7-a45e-4450-979c-91cf07434993}",
