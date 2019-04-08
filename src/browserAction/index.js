@@ -3,8 +3,9 @@ import { composePromise } from '../utils'
 import {
   setSyncStorageAsync,
   getSyncStorageAsync,
-  getStorageKeyFromTabAsync
+  getStorageItemName
 } from '../shared/browserStorage'
+import { getActiveTabUrlAsync } from '../shared/tabs'
 
 const getTextAreaFieldValue = () => {
   const textField = document.querySelector('#lsTxtArea')
@@ -18,6 +19,10 @@ const getUserInputAndSaveToStorageAsync = setSyncStorageAsync(
   getTextAreaFieldValue
 )
 
+export const getStorageKeyFromTabAsync = composePromise(
+  getStorageItemName,
+  getActiveTabUrlAsync
+)
 const setConfigForCurrentDomain = composePromise(
   getUserInputAndSaveToStorageAsync,
   getStorageKeyFromTabAsync

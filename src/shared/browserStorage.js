@@ -1,7 +1,7 @@
 import { COOKIE_FIEND } from '../data/constants'
 import { log, logErr, compose, composePromise } from '../utils'
 
-const getStorageItemName = domain => `${COOKIE_FIEND}::${domain}`
+export const getStorageItemName = domain => `${COOKIE_FIEND}::${domain}`
 const parseTwice = compose(
   JSON.parse,
   JSON.parse
@@ -37,11 +37,6 @@ export const setSyncStorageAsync = valueThunk => async key => {
 
 export const getSyncStorageAsync = key =>
   browser.storage.sync.get(key).then(getItem(key), logErr('getSyncStorage'))
-
-// export const getStorageKeyFromTabAsync = composePromise(
-//   getStorageItemName,
-//   getActiveTabUrlAsync
-// )
 
 export const getSyncStorageByUrlAsync = composePromise(
   getSyncStorageAsync,
