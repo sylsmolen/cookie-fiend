@@ -31,8 +31,7 @@ module.exports = {
   entry: {
     content_scripts: './src/contentScripts/index.js',
     background_scripts: './src/backgroundScripts/index.js',
-    browser_action: './src/browserAction/index.js',
-    extension_page: './src/extensionPage/build/index.js'
+    browser_action: './src/browserAction/index.js'
   },
   output: {
     filename: '[name]/index.js',
