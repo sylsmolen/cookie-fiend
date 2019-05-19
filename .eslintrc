@@ -1,5 +1,8 @@
 {
   "parser": "babel-eslint",
   "extends": ["standard"],
-  "plugins": ["babel", "import", "node", "promise"]
+  "plugins": ["babel", "import", "node", "promise"],
+  "globals": {
+    "browser": true
+  }
 }
