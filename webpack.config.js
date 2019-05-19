@@ -1,21 +1,21 @@
-const webpack = require('webpack')
-const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
+const webpack = require("webpack");
+const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const WebExtWebpackPlugin = require("web-ext-webpack-plugin");
 
 module.exports = {
   module: {
     rules: [
       {
-        include: [path.resolve(__dirname, 'src')],
-        loader: 'babel-loader',
+        include: [path.resolve(__dirname, "src")],
+        loader: "babel-loader",
 
         options: {
-          plugins: ['syntax-dynamic-import'],
+          plugins: ["syntax-dynamic-import"],
 
           presets: [
             [
-              '@babel/preset-env',
+              "@babel/preset-env",
               {
                 modules: false
               }
@@ -29,16 +29,17 @@ module.exports = {
   },
 
   entry: {
-    content_scripts: './src/contentScripts/index.js',
-    background_scripts: './src/backgroundScripts/index.js',
-    browser_action: './src/browserAction/index.js'
+    content_scripts: "./src/contentScripts/index.js",
+    background_scripts: "./src/backgroundScripts/index.js",
+    browser_action: "./src/browserAction/index.js",
+    extension_page: "./src/extensionPage/index.js"
   },
   output: {
-    filename: '[name]/index.js',
-    path: path.resolve(__dirname, 'build')
+    filename: "[name]/index.js",
+    path: path.resolve(__dirname, "build")
   },
 
-  mode: 'development',
+  mode: "development",
 
   optimization: {
     splitChunks: {
@@ -49,7 +50,7 @@ module.exports = {
         }
       },
 
-      chunks: 'async',
+      chunks: "async",
       minChunks: 1,
       minSize: 30000,
       name: true
@@ -59,13 +60,14 @@ module.exports = {
   plugins: [
     new WebExtWebpackPlugin({
       browserConsole: true,
-      startUrl: ['www.goal.com'],
-      sourceDir: path.resolve(__dirname, 'build')
+      startUrl: ["www.goal.com"],
+      sourceDir: path.resolve(__dirname, "build")
     }),
     new webpack.SourceMapDevToolPlugin({}),
     new CopyWebpackPlugin([
-      { from: 'src/browserAction/public', to: 'browser_action/[name].[ext]' },
-      { from: 'public', to: '' }
+      { from: "src/browserAction/public", to: "browser_action/[name].[ext]" },
+      { from: "src/extensionPage/public", to: "extension_page/[name].[ext]" },
+      { from: "public", to: "" }
     ])
   ]
-}
+};

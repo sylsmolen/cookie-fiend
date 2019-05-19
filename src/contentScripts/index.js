@@ -12,15 +12,80 @@ import {
 } from '../utils'
 import { getSyncStorageByUrlAsync } from '../shared/browserStorage'
 
+const SELECTOR_TYPES = {
+  XPATH: 'X_PATH',
+  CSS: 'CSS'
+}
+
+const CONDITIONS = {
+  EQUALS: 'EQUALS',
+  NOT_EQUALS: 'NOT_EQUALS',
+  INCLUDES: 'INCLUDES'
+}
+
+/*
+
+[
+  {
+    "position": 0,
+    "repeat": 0,
+    "event": "style",
+    "name": "cookie info box",
+    "selector": "/html/body/div[3]/div[2]/div[1]/div[2]/h1",
+    "selectorType": "XPATH",
+    "condition":
+    "timeout": 0,
+    "mode": "on load",
+    "modeParam": "#qcCmpUi",
+    "value": {
+      "background-color": "red"
+    },
+    "selectedElement": null,
+    "trigger": null
+  }
+]
+  ,
+  {
+    "position": 1,
+    "repeat": 0,
+    "event": "click",
+    "name": "open settings",
+    "selector": "#qc-cmp-purpose-button",
+    "selectorType"
+    "timeout": 0,
+    "mode": "once",
+    "modeParam": "",
+    "value": null,
+    "selectedElement": null,
+    "trigger": null
+  },
+  {
+    "position": 2,
+    "repeat": 0,
+    "event": "click",
+    "name": "reject cookies",
+    "selector": "button.qc-cmp-button:nth-child(1)",
+    "selectorType":
+    "timeout": 0,
+    "mode": "once",
+    "modeParam": "",
+    "value": null,
+    "selectedElement": null,
+    "trigger": null
+  }
+]
+
+*/
+
 const EVENTS = {
-  CLICK: 'click',
-  STYLE: 'style'
+  CLICK: 'CLICK',
+  STYLE: 'CTYLE'
 }
 
 const EXECUTION_MODE = {
-  ONCE: 'once',
-  INTERVAL: 'interval',
-  ON_LOAD: 'on load'
+  ONCE: 'ONCE',
+  INTERVAL: 'INTERVAL',
+  ON_LOAD: 'ON_LOAD'
 }
 
 /* HELPERS */
@@ -231,7 +296,7 @@ const hi = async () => {
   console.log(window.location.href)
   const res = await getSyncStorageByUrlAsync(window.location.href)
   console.log(res)
-  console.log(JSON.stringify(res))
+  console.log('strigified', JSON.stringify(res))
   runEventQueue(res)
 }
 
