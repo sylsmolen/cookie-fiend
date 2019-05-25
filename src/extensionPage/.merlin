@@ -1,8 +1,8 @@
 ####{BSB GENERATED: NO EDIT
 B lib/bs
 FLG -open ReactHooksTemplate
-FLG -ppx '/usr/local/lib/node_modules/bs-platform/lib/reactjs_jsx_ppx_3.exe'
-FLG -ppx /usr/local/lib/node_modules/bs-platform/lib/bsppx.exe
+FLG -ppx '/home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/reactjs_jsx_ppx_3.exe'
+FLG -ppx /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/bsppx.exe
 S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/ocaml
 B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/ocaml
 FLG -nostdlib -color always

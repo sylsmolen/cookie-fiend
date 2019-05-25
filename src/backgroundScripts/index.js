@@ -17,16 +17,18 @@ const onTabUpdated = async (tabId, changeInfo, tab) => {
   }
 }
 
+const openExtensionPage = () => {
+  var createData = {
+    type: 'detached_panel',
+    url: '/extension_page/index.html',
+    width: 250,
+    height: 100
+  }
+  browser.windows.create(createData)
+}
+
 browser.tabs.onUpdated.addListener(onTabUpdated)
 
+browser.browserAction.onClicked.addListener(openExtensionPage)
+
 run()
-
-var createData = {
-  type: 'detached_panel',
-  url: '/extension_page/index.html',
-  width: 250,
-  height: 100
-}
-var creating = browser.windows.create(createData)
-
-console.log('creating: ', creating)

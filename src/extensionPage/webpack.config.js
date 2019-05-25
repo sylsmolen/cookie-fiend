@@ -20,7 +20,6 @@ module.exports = {
     new CopyWebpackPlugin([{ from: './public', to: '' }])
   ],
   devServer: {
-    writeToDisk: true,
     compress: true,
     contentBase: outputDir,
     port: process.env.PORT || 8000,

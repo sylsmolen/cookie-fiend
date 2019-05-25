@@ -31,7 +31,8 @@ module.exports = {
   entry: {
     content_scripts: './src/contentScripts/index.js',
     background_scripts: './src/backgroundScripts/index.js',
-    browser_action: './src/browserAction/index.js'
+    browser_action: './src/browserAction/index.js',
+    extension_page: './src/extensionPage/lib/js/src/Index.bs.js'
   },
   output: {
     filename: '[name]/index.js',
@@ -66,7 +67,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'src/browserAction/public', to: 'browser_action/[name].[ext]' },
       {
-        from: 'src/extensionPage/build',
+        from: 'src/extensionPage/public',
         to: 'extension_page/[name].[ext]'
       },
       { from: 'public', to: '' }

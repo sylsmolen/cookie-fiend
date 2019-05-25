@@ -19,7 +19,6 @@
     "default_icon": {
       "64": "icons/icon.png"
     },
-    "default_popup": "browser_action/index.html",
     "default_title": "cookie-fiend"
   },
   "permissions": ["storage", "<all_urls>", "tabs"],
