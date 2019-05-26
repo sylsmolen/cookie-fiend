@@ -25,5 +25,26 @@ module.exports = {
     port: process.env.PORT || 8000,
     historyApiFallback: true
   },
-  devtool: false
+  devtool: false,
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'postcss-loader'
+          }
+        ]
+      }
+    ]
+  }
 }

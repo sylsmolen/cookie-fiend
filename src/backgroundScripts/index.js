@@ -21,8 +21,8 @@ const openExtensionPage = () => {
   var createData = {
     type: 'detached_panel',
     url: '/extension_page/index.html',
-    width: 250,
-    height: 100
+    width: 850,
+    height: 550
   }
   browser.windows.create(createData)
 }
