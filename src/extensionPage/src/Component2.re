@@ -21,11 +21,11 @@ let make = (~greeting) => {
       {count: 0, show: true},
     );
 
-  let message = "You've clicked this " ++ string_of_int(state.count) ++ " times(s)";
+  let message = "You've clickesd this " ++ string_of_int(state.count) ++ " times(s)";
   <div>
     <button onClick={_event => dispatch(Click)}> {ReasonReact.string(message)} </button>
     <button onClick={_event => dispatch(Toggle)}>
-      {ReasonReact.string("Toggle greeting")}
+      {ReasonReact.string("Toggle greseting")}
     </button>
     {state.show ? ReasonReact.string(greeting) : ReasonReact.null}
   </div>;

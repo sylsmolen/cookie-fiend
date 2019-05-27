@@ -30,6 +30,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader'
@@ -37,11 +38,9 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
+              modules: true,
+              localIdentName: '[name]__[local]--[hash:base64:5]'
             }
-          },
-          {
-            loader: 'postcss-loader'
           }
         ]
       }

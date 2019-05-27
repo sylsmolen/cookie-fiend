@@ -1,6 +1,9 @@
 [@bs.deriving abstract]
-type style = {testStyle: string};
+type locals = {testStyle: string};
+
+[@bs.deriving abstract]
+type style = {locals};
 
 [@bs.val] external requireCSSNoPath: string => style = "require";
 
-let requireCSS = (path: string) => requireCSSNoPath("../../../src/" ++ path);
+let requireCSS = (component: string) => requireCSSNoPath("../../../src/" ++ component ++ ".css");
