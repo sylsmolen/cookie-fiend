@@ -1,0 +1,36 @@
+.bodyText {
+  color: #464646;
+}
+
+.lightText {
+  color: #888;
+}
+
+.headingText {
+  color: #111111;
+}
+
+.backgroundGrey {
+  background-color: #eeeeee;
+}
+
+.primaryTxt {
+  color: #26c382;
+}
+
+.primaryBackground {
+  background-color: #26c382;
+}
+
+.primaryDarkBackground {
+  background-color: #6b9c89;
+}
+
+.secondaryBackgroungd {
+  background-color: #99c6da;
+}
+
+.secondaryDarkBackgroungd {
+}
+
+/* two diff grey #D7F2E4  #C6D7D5*/

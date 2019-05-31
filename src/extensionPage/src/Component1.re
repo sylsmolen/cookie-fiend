@@ -5,7 +5,7 @@ type style = {testStyle: string};
 
 [@bs.val] external requireCSSNoPaths: string => style = "require";
 
-let wtf = requireCSSNoPaths("../../../src/Component1.css");
+let wtf = requireCSSNoPaths("./Component1.css");
 
 let styles = requireCSS("Component1");
 
@@ -15,4 +15,7 @@ let handleClick = _event => Js.log(wtf);
 
 [@react.component]
 let make = (~message) =>
-  <div className={testStyleGet(wtf)} onClick=handleClick> {ReasonReact.string(message)} </div>;
+  <div className={testStyleGet(wtf)} onClick=handleClick>
+    <TextField />
+    {ReasonReact.string(message)}
+  </div>;

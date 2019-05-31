@@ -11,4 +11,6 @@ S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reas
 B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reason-react/lib/ocaml
 S src
 B lib/bs/src
+S src/components
+B lib/bs/src/components
 ####BSB GENERATED: NO EDIT}

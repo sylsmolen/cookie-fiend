@@ -1,4 +1,4 @@
 .testStyle {
-  composes: primaryTxt from "./Colors.css";
+  composes: primaryText from "./styles/Colors.css";
   display: flex;
 }

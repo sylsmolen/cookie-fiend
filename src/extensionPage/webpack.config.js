@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const outputDir = path.join(__dirname, 'build/')
+const bsOutputDir = path.join(__dirname, 'lib/js')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
@@ -17,7 +18,16 @@ module.exports = {
       template: './public/index.html',
       inject: false
     }),
-    new CopyWebpackPlugin([{ from: './public', to: '' }])
+    new CopyWebpackPlugin([
+      {
+        from: './public',
+        to: ''
+      },
+      {
+        from: './src/**/*.css',
+        to: bsOutputDir
+      }
+    ])
   ],
   devServer: {
     compress: true,

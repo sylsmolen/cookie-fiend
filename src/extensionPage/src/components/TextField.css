@@ -1,0 +1,25 @@
+.textField {
+  display: "inline-block",
+    backgroundColor: "#fff",
+    color: colors.text.body,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    fontSize: typography.sizes.base,
+    fontFamily: typography.fonts.regular,
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: colors.greyscale.light,
+    borderRadius: "3px",
+    boxSizing: "content-box",
+    paddingTop: "0.5em",
+    paddingBottom: "0.5em",
+    paddingLeft: "0.5em",
+    paddingRight: "0.5em",
+    resize: "none",
+    transition: "all 0.3s",
+    width: "calc(100% - 1em)",
+    outline: 0,
+    ":focus": {
+    bordercolor: colors.accents.primary;
+  }
+}

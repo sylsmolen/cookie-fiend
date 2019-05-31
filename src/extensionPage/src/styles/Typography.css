@@ -1,0 +1,19 @@
+.textSmall {
+  font-size: 12px;
+}
+
+.textBase {
+  font-size: 16px;
+}
+
+.textLarge {
+  font-size: 18px;
+}
+
+.textXLarge {
+  font-size: 20px;
+}
+
+.bold {
+  font-weight: bold;
+}
