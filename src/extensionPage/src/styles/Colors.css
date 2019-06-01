@@ -34,6 +34,13 @@
   background-color: #8cc2da;
 }
 
+.greyscaleLightBackground {
+  background-color: #d7f2e4;
+}
+
+.greyscaleDarkBackground {
+  background-color: #c6d7d5;
+}
 /* two diff grey #D7F2E4  #C6D7D5*/
 
 /* #6b9c89; dark primary ?*/

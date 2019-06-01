@@ -1,27 +1,30 @@
 open Utils;
+let styles = requireCSS("./Button.css");
 
 [@bs.deriving abstract]
 type style = {
   primary: string,
   secondary: string,
-  buttonText: string,
-};
-let styles = requireCSS("./Button.css");
-
-Js.log(styles);
-
-module Primary = {
-  [@react.component]
-  let make = (~buttonText: string, ~onClick) => {
-    <button className={primaryGet(styles)} onClick> {ReasonReact.string(buttonText)} </button>;
-  };
+  inverted: string,
+  cancel: string,
 };
 
-module Secondary = {
-  [@react.component]
-  let make = (~buttonText: string, ~onClick) => {
-    <button className={secondaryGet(styles)} onClick>
-      <span className={buttonTextGet(styles)}> {ReasonReact.string(buttonText)} </span>
-    </button>;
-  };
+type buttonStyle =
+  | Primary
+  | Secondary
+  | Inverted
+  | Cancel;
+
+/* TODO add inverted btn*/
+[@react.component]
+let make = (~style: buttonStyle, ~buttonText: string, ~onClick) => {
+  let className =
+    switch (style) {
+    | Primary => primaryGet(styles)
+    | Secondary => secondaryGet(styles)
+    | Inverted => invertedGet(styles)
+    | Cancel => cancelGet(styles)
+    };
+
+  <button className onClick> {ReasonReact.string(buttonText)} </button>;
 };

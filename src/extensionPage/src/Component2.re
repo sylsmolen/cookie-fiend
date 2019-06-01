@@ -23,8 +23,10 @@ let make = (~greeting) => {
 
   let message = "You've clickesd this " ++ string_of_int(state.count) ++ " times(s)";
   <div>
-    <Button.Primary onClick={_event => dispatch(Click)} buttonText=message />
-    <Button.Secondary onClick={_event => dispatch(Toggle)} buttonText="Toggle greeting" />
+    <Button style=Primary onClick={_event => dispatch(Click)} buttonText=message />
+    <Button style=Secondary onClick={_event => dispatch(Toggle)} buttonText="Toggle greeting" />
+    <Button style=Inverted onClick={_event => dispatch(Toggle)} buttonText="Toggle greeting" />
+    <Button style=Cancel onClick={_event => dispatch(Toggle)} buttonText="Cancel" />
     {state.show ? ReasonReact.string(greeting) : ReasonReact.null}
   </div>;
 };

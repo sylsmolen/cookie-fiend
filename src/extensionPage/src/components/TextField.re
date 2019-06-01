@@ -5,9 +5,8 @@ type style = {
   textField: string,
   label: string,
 };
-let styles = requireCSS("./TextField.css");
 
-Js.log(styles);
+let styles = requireCSS("./TextField.css");
 
 [@react.component]
 let make = (~labelText: string) => {

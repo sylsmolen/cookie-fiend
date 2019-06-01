@@ -10,7 +10,6 @@
   border-radius: 4px;
   transition: all 0.3s;
   outline: 0;
-  -moz-user-select: none;
 }
 
 .primary {
@@ -35,6 +34,25 @@
   border-color: #8cc2da;
 }
 
-.buttonText {
-  -moz-user-select: none; /* Firefox 43+ */
+.inverted {
+  composes: button;
+  background-color: inherit;
+  border-color: #26c382;
+  color: #26c382;
+}
+
+.inverted:hover {
+  border-color: #26b87b;
+  color: #26b87b;
+}
+
+.cancel {
+  composes: button;
+  background-color: #999;
+  border-color: #999;
+}
+
+.cancel:hover {
+  background-color: #929292;
+  border-color: #929292;
 }
