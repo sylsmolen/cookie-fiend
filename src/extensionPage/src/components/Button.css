@@ -1,0 +1,40 @@
+.button {
+  composes: textSmall from "../styles/Typography.css";
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  padding: 0.5em;
+  display: inline-block;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  transition: all 0.3s;
+  outline: 0;
+  -moz-user-select: none;
+}
+
+.primary {
+  composes: button;
+  background-color: #26c382;
+  border-color: #26c382;
+}
+
+.primary:hover {
+  background-color: #26b87b;
+  border-color: #26b87b;
+}
+
+.secondary {
+  composes: button;
+  background-color: #99c6da;
+  border-color: #99c6da;
+}
+
+.secondary:hover {
+  background-color: #8cc2da;
+  border-color: #8cc2da;
+}
+
+.buttonText {
+  -moz-user-select: none; /* Firefox 43+ */
+}

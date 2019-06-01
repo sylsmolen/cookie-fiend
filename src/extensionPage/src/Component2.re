@@ -23,10 +23,8 @@ let make = (~greeting) => {
 
   let message = "You've clickesd this " ++ string_of_int(state.count) ++ " times(s)";
   <div>
-    <button onClick={_event => dispatch(Click)}> {ReasonReact.string(message)} </button>
-    <button onClick={_event => dispatch(Toggle)}>
-      {ReasonReact.string("Toggle greseting")}
-    </button>
+    <Button.Primary onClick={_event => dispatch(Click)} buttonText=message />
+    <Button.Secondary onClick={_event => dispatch(Toggle)} buttonText="Toggle greeting" />
     {state.show ? ReasonReact.string(greeting) : ReasonReact.null}
   </div>;
 };

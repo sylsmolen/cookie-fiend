@@ -3,7 +3,7 @@
 }
 
 .lightText {
-  color: #888;
+  color: #999;
 }
 
 .headingText {
@@ -14,7 +14,7 @@
   background-color: #eeeeee;
 }
 
-.primaryTxt {
+.primaryText {
   color: #26c382;
 }
 
@@ -23,14 +23,17 @@
 }
 
 .primaryDarkBackground {
-  background-color: #6b9c89;
+  background-color: #26b87b;
 }
 
-.secondaryBackgroungd {
+.secondaryBackground {
   background-color: #99c6da;
 }
 
-.secondaryDarkBackgroungd {
+.secondaryDarkBackground {
+  background-color: #8cc2da;
 }
 
 /* two diff grey #D7F2E4  #C6D7D5*/
+
+/* #6b9c89; dark primary ?*/
