@@ -5,19 +5,40 @@ open Utils;
  type style = {testStyle: string};
  let styles: style = requireCSS("./PluginForm.css");
 
- Js.log(testStyleGet(styles));
-   <option> {ReasonReact.string("Current URL")} </option>
-        <option disabled=true> {ReasonReact.string("Current origin")} </option>
-      </SelectField>
  */
+
+type action =
+  | SelectScope(string)
+  | SetTimetout(int);
+
+type state = {
+  scope: string,
+  timeout: int,
+};
 
 [@react.component]
 let make = () => {
+  let (state, dispatch) =
+    React.useReducer(
+      (state, action) =>
+        switch (action) {
+        | SelectScope(scope) => {...state, scope}
+        | SetTimetout(time) => {...state, timeout: time}
+        },
+      {scope: "", timeout: 1},
+    );
+
   <div>
     <h1> {ReasonReact.string("Add plugin")} </h1>
     <WhitePanel>
-      <SelectField labelText="Scope" options=[|"Current URL", "Current origin"|] />
+      <SelectField
+        labelText="Scope"
+        options=[|"Current URL", "Current origin"|]
+        value={state.scope}
+        onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
+      />
       <TextField labelText="Input label" />
+      <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
     </WhitePanel>
   </div>;
 };
