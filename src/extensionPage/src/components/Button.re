@@ -15,7 +15,6 @@ type buttonStyle =
   | Inverted
   | Cancel;
 
-/* TODO add inverted btn*/
 [@react.component]
 let make = (~style: buttonStyle, ~buttonText: string, ~onClick) => {
   let className =

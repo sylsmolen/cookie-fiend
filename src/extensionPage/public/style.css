@@ -1,5 +1,12 @@
 body {
+  margin: 1em;
   font-family: "Lato", sans-serif;
-  background-color: #eeeeee;
+  font-size: 16px;
+  /* background-color: #eeeeee; */
+  background-color: #f1f2f3;
   color: #464646;
+}
+
+p {
+  margin-top: 0;
 }

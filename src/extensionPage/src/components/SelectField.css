@@ -1,4 +1,4 @@
-.textField {
+.selectField {
   composes: textBase from "../styles/Typography.css";
   padding: 6px;
   display: inline-block;

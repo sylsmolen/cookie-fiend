@@ -11,7 +11,7 @@
 }
 
 .backgroundGrey {
-  background-color: #eeeeee;
+  background-color: #f7fafb;
 }
 
 .primaryText {
@@ -34,11 +34,11 @@
   background-color: #8cc2da;
 }
 
-.greyscaleLightBackground {
+.primaryLightBackground {
   background-color: #d7f2e4;
 }
 
-.greyscaleDarkBackground {
+.secondaryLightBackground {
   background-color: #c6d7d5;
 }
 /* two diff grey #D7F2E4  #C6D7D5*/
