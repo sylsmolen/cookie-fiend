@@ -6,7 +6,9 @@ open Utils;
  let styles: style = requireCSS("./PluginForm.css");
 
  Js.log(testStyleGet(styles));
-
+   <option> {ReasonReact.string("Current URL")} </option>
+        <option disabled=true> {ReasonReact.string("Current origin")} </option>
+      </SelectField>
  */
 
 [@react.component]
@@ -14,10 +16,7 @@ let make = () => {
   <div>
     <h1> {ReasonReact.string("Add plugin")} </h1>
     <WhitePanel>
-      <SelectField labelText="Scope">
-        <option> {ReasonReact.string("Current URL")} </option>
-        <option disabled=true> {ReasonReact.string("Current origin")} </option>
-      </SelectField>
+      <SelectField labelText="Scope" options=[|"Current URL", "Current origin"|] />
       <TextField labelText="Input label" />
     </WhitePanel>
   </div>;

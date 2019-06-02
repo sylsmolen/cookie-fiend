@@ -10,6 +10,7 @@
   outline: 0;
   margin-bottom: 0.5em;
   min-width: 250px;
+  background-color: white;
 }
 
 .textField:focus {
@@ -19,4 +20,7 @@
 .label {
   composes: lightText from "../styles/Colors.css";
   margin-bottom: 0.1em;
+}
+
+.option {
 }
