@@ -31,14 +31,17 @@ let make = () => {
   <div>
     <h1> {ReasonReact.string("Add plugin")} </h1>
     <WhitePanel>
-      <SelectField
-        labelText="Scope"
-        options=[|"Current URL", "Current origin"|]
-        value={state.scope}
-        onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
-      />
-      <TextField labelText="Input label" />
-      <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
+      <Flex style=[Column, AlignItemsFlexEnd]>
+        <SelectField
+          labelText="Scope"
+          options=[|"Current URL", "Current origin"|]
+          value={state.scope}
+          onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
+        />
+        <TextField labelText="Input label" />
+        <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
+        <Button style=Primary onClick={_event => ()} buttonText="save" />
+      </Flex>
     </WhitePanel>
   </div>;
 };
