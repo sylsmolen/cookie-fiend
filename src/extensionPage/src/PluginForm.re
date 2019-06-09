@@ -38,7 +38,8 @@ let make = () => {
         <SelectField
           labelText="Scope"
           options=Settings.scope
-          getter=Settings.getScopeValue
+          disabledOptions=[Settings.Origin]
+          getOptionValue=Settings.getScopeValue
           value={state.scope}
           onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
         />

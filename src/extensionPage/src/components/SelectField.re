@@ -15,18 +15,22 @@ let make =
       ~labelText: string,
       ~value: 'selectable,
       ~options: array('selectable),
-      ~getter: 'selectable => string,
+      ~getOptionValue: 'selectable => string,
       ~onChange,
+      ~disabledOptions=[],
     ) => {
-  let mapOptions = optionLabel =>
-    <option value={getter(optionLabel)} className={optionGet(styles)}>
-      {ReasonReact.string(getter(optionLabel))}
+  let mapOptions = option =>
+    <option
+      value={getOptionValue(option)}
+      disabled={List.exists(disabledOption => disabledOption === option, disabledOptions)}
+      className={optionGet(styles)}>
+      {ReasonReact.string(getOptionValue(option))}
     </option>;
   let optionList = Array.map(mapOptions, options);
 
   <div>
     <p className={labelGet(styles)}> {ReasonReact.string(labelText)} </p>
-    <select className={selectFieldGet(styles)} value={getter(value)} onChange>
+    <select className={selectFieldGet(styles)} value={getOptionValue(value)} onChange>
       {ReasonReact.array(optionList)}
     </select>
   </div>;
