@@ -10,14 +10,16 @@ let styles: style = requireCSS("./PluginForm.css");
 
 type action =
   | SelectScope(Settings.scope)
+  | SelectEvent(Settings.event)
   | SetTimetout(int);
 
 type state = {
   scope: Settings.scope,
+  event: Settings.event,
   timeout: int,
 };
 
-let initialState: state = {scope: Settings.URL, timeout: 0};
+let initialState: state = {scope: Settings.URL, event: Settings.Style, timeout: 0};
 
 [@react.component]
 let make = () => {
@@ -26,6 +28,7 @@ let make = () => {
       (state, action) =>
         switch (action) {
         | SelectScope(scope) => {...state, scope}
+        | SelectEvent(event) => {...state, event}
         | SetTimetout(time) => {...state, timeout: time}
         },
       initialState,
@@ -38,13 +41,23 @@ let make = () => {
         <SelectField
           labelText="Scope"
           options=Settings.scope
-          disabledOptions=[Settings.Origin]
+          // disabledOptions=[Settings.Origin]
           getOptionValue=Settings.getScopeValue
+          getOptionVariant=Settings.getScopeVariant
           value={state.scope}
-          onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
+          onChange={value => dispatch(SelectScope(value))}
+        />
+        <SelectField
+          labelText="Event"
+          options=Settings.event
+          getOptionValue=Settings.getEventValue
+          getOptionVariant=Settings.getEventVariant
+          value={state.event}
+          onChange={value => dispatch(SelectEvent(value))}
         />
         <TextField labelText="Inputs label" />
         <p> {ReasonReact.string("Selected option: " ++ Settings.getScopeValue(state.scope))} </p>
+        <p> {ReasonReact.string("Selected option: " ++ Settings.getEventValue(state.event))} </p>
         <Button
           className={saveButtonGet(styles)}
           style=Primary

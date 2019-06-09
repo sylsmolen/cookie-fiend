@@ -16,6 +16,7 @@ let make =
       ~value: 'selectable,
       ~options: array('selectable),
       ~getOptionValue: 'selectable => string,
+      ~getOptionVariant: string => 'selectable,
       ~onChange,
       ~disabledOptions=[],
     ) => {
@@ -28,9 +29,16 @@ let make =
     </option>;
   let optionList = Array.map(mapOptions, options);
 
+  let handleChange = event => {
+    let valueAsString = ReactEvent.Form.target(event)##value;
+    let variantValue = getOptionVariant(valueAsString);
+    onChange(variantValue);
+  };
+
   <div>
     <p className={labelGet(styles)}> {ReasonReact.string(labelText)} </p>
-    <select className={selectFieldGet(styles)} value={getOptionValue(value)} onChange>
+    <select
+      className={selectFieldGet(styles)} value={getOptionValue(value)} onChange=handleChange>
       {ReasonReact.array(optionList)}
     </select>
   </div>;

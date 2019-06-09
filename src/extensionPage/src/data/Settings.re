@@ -4,10 +4,17 @@ type scope =
 
 let scope = [|URL, Origin|];
 
-let getScopeValue = var =>
-  switch (var) {
+let getScopeValue = variant =>
+  switch (variant) {
   | URL => "Current URL"
   | Origin => "Current origin"
+  };
+
+let getScopeVariant = value =>
+  switch (value) {
+  | "Current URL" => URL
+  | "Current origin" => Origin
+  | _ => URL
   };
 
 type event =
@@ -16,10 +23,17 @@ type event =
 
 let event = [|Click, Style|];
 
-let getEventValue = var =>
-  switch (var) {
+let getEventValue = variant =>
+  switch (variant) {
   | Click => "Click"
   | Style => "Style"
+  };
+
+let getEventVariant = value =>
+  switch (value) {
+  | "Click" => Click
+  | "Style" => Style
+  | _ => Style
   };
 
 type executionMode =
@@ -29,8 +43,8 @@ type executionMode =
 
 let executionMode = [|Once, Interval, OnLoad|];
 
-let getExecutionModeValue = var =>
-  switch (var) {
+let getExecutionModeValue = variant =>
+  switch (variant) {
   | Once => "Once"
   | Interval => "Interval"
   | OnLoad => "On load"
@@ -42,8 +56,8 @@ type selectorType =
 
 let selectorType = [|CSS, XPath|];
 
-let getSelectorTypeValue = var =>
-  switch (var) {
+let getSelectorTypeValue = variant =>
+  switch (variant) {
   | CSS => "CSS"
   | XPath => "XPath"
   };
