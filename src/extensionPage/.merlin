@@ -1,6 +1,6 @@
 ####{BSB GENERATED: NO EDIT
 B lib/bs
-FLG -open ReactHooksTemplate
+FLG -open CookieFiend
 FLG -ppx '/home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/reactjs_jsx_ppx_3.exe'
 FLG -ppx /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/bsppx.exe
 S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/ocaml
@@ -11,6 +11,8 @@ S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reas
 B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reason-react/lib/ocaml
 S src
 B lib/bs/src
+S src/data
+B lib/bs/src/data
 S src/components
 B lib/bs/src/components
 ####BSB GENERATED: NO EDIT}

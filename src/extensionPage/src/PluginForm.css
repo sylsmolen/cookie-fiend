@@ -1,0 +1,7 @@
+.form {
+  max-width: 250px;
+}
+
+.saveButton {
+  align-self: flex-end;
+}

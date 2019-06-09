@@ -1,11 +1,12 @@
 open Utils;
 
-/*
- [@bs.deriving abstract]
- type style = {testStyle: string};
- let styles: style = requireCSS("./PluginForm.css");
+[@bs.deriving abstract]
+type style = {
+  form: string,
+  saveButton: string,
+};
 
- */
+let styles: style = requireCSS("./PluginForm.css");
 
 type action =
   | SelectScope(string)
@@ -16,6 +17,8 @@ type state = {
   timeout: int,
 };
 
+let initialState: state = {scope: Settings.scope[0], timeout: 0};
+
 [@react.component]
 let make = () => {
   let (state, dispatch) =
@@ -25,28 +28,37 @@ let make = () => {
         | SelectScope(scope) => {...state, scope}
         | SetTimetout(time) => {...state, timeout: time}
         },
-      {scope: "", timeout: 1},
+      initialState,
     );
 
   <div>
     <h1> {ReasonReact.string("Add plugin")} </h1>
     <WhitePanel>
-      <Flex style=[Column, AlignItemsFlexEnd]>
+      <Flex style=[Column, AlignItemsFlexStart] className={formGet(styles)}>
         <SelectField
           labelText="Scope"
-          options=[|"Current URL", "Current origin"|]
+          options=Settings.scope
           value={state.scope}
           onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
         />
-        <TextField labelText="Input label" />
+        <TextField labelText="Inputs label" />
         <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
-        <Button style=Primary onClick={_event => ()} buttonText="save" />
+        <Button
+          className={saveButtonGet(styles)}
+          style=Primary
+          onClick={_event => ()}
+          buttonText="save"
+        />
       </Flex>
     </WhitePanel>
   </div>;
 };
 
 /*
+
+
+
+
   {
      "position": 0,
      "repeat": 0,

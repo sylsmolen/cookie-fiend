@@ -16,8 +16,8 @@ type buttonStyle =
   | Cancel;
 
 [@react.component]
-let make = (~style: buttonStyle, ~buttonText: string, ~onClick) => {
-  let className =
+let make = (~style: buttonStyle, ~buttonText: string, ~className="", ~onClick) => {
+  let baseStyleName =
     switch (style) {
     | Primary => primaryGet(styles)
     | Secondary => secondaryGet(styles)
@@ -25,5 +25,7 @@ let make = (~style: buttonStyle, ~buttonText: string, ~onClick) => {
     | Cancel => cancelGet(styles)
     };
 
-  <button className onClick> {ReasonReact.string(buttonText)} </button>;
+  <button className={baseStyleName ++ " " ++ className} onClick>
+    {ReasonReact.string(buttonText)}
+  </button>;
 };

@@ -20,8 +20,9 @@ type flexOptions =
   | AlignItemsFlexEnd;
 
 [@react.component]
-let make = (~children, ~style: list(flexOptions)) => {
-  let className =
+let make = (~children, ~style: list(flexOptions), ~className="") => {
+  let baseClassNames = flexGet(styles) ++ " " ++ className;
+  let flexClassName =
     List.fold_left(
       (acc, current) => {
         let currentClassName =
@@ -32,12 +33,11 @@ let make = (~children, ~style: list(flexOptions)) => {
           | AlignItemsFlexStart => alignItemsFlexStartGet(styles)
           | AlignItemsFlexEnd => alignItemsFlexEndGet(styles)
           };
-
         acc ++ " " ++ currentClassName;
       },
-      flexGet(styles),
+      baseClassNames,
       style,
     );
 
-  <div className> children </div>;
+  <div className=flexClassName> children </div>;
 };

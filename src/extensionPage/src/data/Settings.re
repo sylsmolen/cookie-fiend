@@ -1,0 +1,1 @@
+let scope = [|"Current URL", "Current origin"|];
