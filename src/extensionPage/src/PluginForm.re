@@ -9,15 +9,15 @@ type style = {
 let styles: style = requireCSS("./PluginForm.css");
 
 type action =
-  | SelectScope(string)
+  | SelectScope(Settings.scope)
   | SetTimetout(int);
 
 type state = {
-  scope: string,
+  scope: Settings.scope,
   timeout: int,
 };
 
-let initialState: state = {scope: Settings.scope[0], timeout: 0};
+let initialState: state = {scope: Settings.URL, timeout: 0};
 
 [@react.component]
 let make = () => {
@@ -38,11 +38,12 @@ let make = () => {
         <SelectField
           labelText="Scope"
           options=Settings.scope
+          getter=Settings.getScopeValue
           value={state.scope}
           onChange={event => dispatch(SelectScope(ReactEvent.Form.target(event)##value))}
         />
         <TextField labelText="Inputs label" />
-        <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
+        <p> {ReasonReact.string("Selected option: " ++ Settings.getScopeValue(state.scope))} </p>
         <Button
           className={saveButtonGet(styles)}
           style=Primary

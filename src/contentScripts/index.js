@@ -23,6 +23,18 @@ const CONDITIONS = {
   INCLUDES: 'INCLUDES'
 }
 
+const EVENTS = {
+  CLICK: 'CLICK',
+  STYLE: 'CTYLE'
+}
+
+const EXECUTION_MODE = {
+  ONCE: 'ONCE',
+  INTERVAL: 'INTERVAL',
+  ON_LOAD: 'ON_LOAD'
+}
+
+
 /*
 
 [
@@ -77,16 +89,7 @@ const CONDITIONS = {
 
 */
 
-const EVENTS = {
-  CLICK: 'CLICK',
-  STYLE: 'CTYLE'
-}
 
-const EXECUTION_MODE = {
-  ONCE: 'ONCE',
-  INTERVAL: 'INTERVAL',
-  ON_LOAD: 'ON_LOAD'
-}
 
 /* HELPERS */
 
