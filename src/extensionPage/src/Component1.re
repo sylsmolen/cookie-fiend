@@ -11,6 +11,6 @@ let handleClick = _event => Js.log(styles);
 [@react.component]
 let make = (~message) =>
   <div className={testStyleGet(styles)} onClick=handleClick>
-    <TextField labelText="Input label" />
+    
     {ReasonReact.string(message)}
   </div>;

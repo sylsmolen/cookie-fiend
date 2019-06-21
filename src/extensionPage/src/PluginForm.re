@@ -9,17 +9,17 @@ type style = {
 let styles: style = requireCSS("./PluginForm.css");
 
 type action =
-  | SelectScope(Settings.scope)
-  | SelectEvent(Settings.event)
-  | SetTimetout(int);
+  | SetTimetout(int)
+  | SelectScope(string)
+  | SelectEvent(string);
 
 type state = {
-  scope: Settings.scope,
-  event: Settings.event,
+  scope: string,
+  event: string,
   timeout: int,
 };
 
-let initialState: state = {scope: Settings.URL, event: Settings.Style, timeout: 0};
+let initialState: state = {scope: Settings.scope_url, event: Settings.event_style, timeout: 0};
 
 [@react.component]
 let make = () => {
@@ -41,23 +41,19 @@ let make = () => {
         <SelectField
           labelText="Scope"
           options=Settings.scope
-          // disabledOptions=[Settings.Origin]
-          getOptionValue=Settings.getScopeValue
-          getOptionVariant=Settings.getScopeVariant
+          disabledOptions=[Settings.scope_browser]
           value={state.scope}
           onChange={value => dispatch(SelectScope(value))}
         />
         <SelectField
           labelText="Event"
           options=Settings.event
-          getOptionValue=Settings.getEventValue
-          getOptionVariant=Settings.getEventVariant
           value={state.event}
           onChange={value => dispatch(SelectEvent(value))}
         />
         <TextField labelText="Inputs label" />
-        <p> {ReasonReact.string("Selected option: " ++ Settings.getScopeValue(state.scope))} </p>
-        <p> {ReasonReact.string("Selected option: " ++ Settings.getEventValue(state.event))} </p>
+        <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
+        <p> {ReasonReact.string("Selected option: " ++ state.event)} </p>
         <Button
           className={saveButtonGet(styles)}
           style=Primary

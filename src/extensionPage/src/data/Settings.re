@@ -1,66 +1,21 @@
-type scope =
-  | URL
-  | Origin;
+let scope_url = "Current URL";
+let scope_origin = "Current origin";
+let scope_browser = "Browser";
+let scope = [scope_url, scope_origin, scope_browser];
 
-let scope = [|URL, Origin|];
+let event_click = "Click";
+let event_style = "Style";
+let event = [event_click, event_style];
 
-let getScopeValue = variant =>
-  switch (variant) {
-  | URL => "Current URL"
-  | Origin => "Current origin"
-  };
+let mode_once = "Once";
+let mode_interval = "Interval";
+let mode_on_load = "On load";
+let mode_keyboard = "Keyboard shortcut";
+let mode = [mode_once, mode_interval, mode_on_load, mode_keyboard];
 
-let getScopeVariant = value =>
-  switch (value) {
-  | "Current URL" => URL
-  | "Current origin" => Origin
-  | _ => URL
-  };
-
-type event =
-  | Click
-  | Style;
-
-let event = [|Click, Style|];
-
-let getEventValue = variant =>
-  switch (variant) {
-  | Click => "Click"
-  | Style => "Style"
-  };
-
-let getEventVariant = value =>
-  switch (value) {
-  | "Click" => Click
-  | "Style" => Style
-  | _ => Style
-  };
-
-type executionMode =
-  | Once
-  | Interval
-  | OnLoad;
-
-let executionMode = [|Once, Interval, OnLoad|];
-
-let getExecutionModeValue = variant =>
-  switch (variant) {
-  | Once => "Once"
-  | Interval => "Interval"
-  | OnLoad => "On load"
-  };
-
-type selectorType =
-  | XPath
-  | CSS;
-
-let selectorType = [|CSS, XPath|];
-
-let getSelectorTypeValue = variant =>
-  switch (variant) {
-  | CSS => "CSS"
-  | XPath => "XPath"
-  };
+let selector_css = "CSS";
+let selector_xpath = "XPath";
+let selector = [selector_css, selector_xpath];
 
 /*
  const CONDITIONS = {
