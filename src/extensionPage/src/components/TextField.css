@@ -4,7 +4,7 @@
   display: inline-block;
   border-width: 1px;
   border-style: solid;
-  border-color: #c6d7d5;
+  border-color: var(--grey2);
   border-radius: 4px;
   transition: all 0.3s;
   outline: 0;
@@ -14,10 +14,10 @@
 }
 
 .textField:focus {
-  border-color: #99c6da;
+  border-color: var(--secondaryColour);
 }
 
 .label {
-  composes: lightText from "../styles/Colors.css";
+  color: var(--lightTextColour);
   margin-bottom: 0.1em;
 }

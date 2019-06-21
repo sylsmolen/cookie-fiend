@@ -1,5 +1,5 @@
 .button {
-  composes: textSmall from "../styles/Typography.css";
+  font-size: var(--smallText);
   font-weight: bold;
   color: white;
   cursor: pointer;
@@ -15,45 +15,45 @@
 
 .primary {
   composes: button;
-  background-color: #26c382;
-  border-color: #26c382;
+  background-color: var(--primaryColour);
+  border-color: var(--primaryColour);
 }
 
 .primary:hover {
-  background-color: #26b87b;
-  border-color: #26b87b;
+  background-color: var(--primaryDarkColour);
+  border-color: var(--primaryDarkColour);
 }
 
 .secondary {
   composes: button;
-  background-color: #99c6da;
-  border-color: #99c6da;
+  background-color: var(--secondaryColour);
+  border-color: var(--secondaryColour);
 }
 
 .secondary:hover {
-  background-color: #8cc2da;
-  border-color: #8cc2da;
+  background-color: var(--secondaryDarkColour);
+  border-color: var(--secondaryDarkColour);
 }
 
 .inverted {
   composes: button;
   background-color: inherit;
-  border-color: #26c382;
-  color: #26c382;
+  border-color: var(--primaryColour);
+  color: var(--primaryColour);
 }
 
 .inverted:hover {
-  border-color: #26b87b;
-  color: #26b87b;
+  border-color: var(--primaryDarkColour);
+  color: var(--primaryDarkColour);
 }
 
 .cancel {
   composes: button;
-  background-color: #999;
-  border-color: #999;
+  background-color: var(--lightTextColour);
+  border-color: var(--lightTextColour);
 }
 
 .cancel:hover {
-  background-color: #929292;
-  border-color: #929292;
+  background-color: var(--grey3);
+  border-color: var(--grey3);
 }

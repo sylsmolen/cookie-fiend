@@ -1,3 +1,37 @@
+:root {
+  --primaryColour: #26c382;
+  --primaryDarkColour: #26b87b;
+
+  --secondaryColour: #99c6da;
+  --secondaryDarkColour: #8cc2da;
+
+  --lightTextColour: #999;
+  --bodyTextColour: #464646;
+  --headingTextColour: #111111;
+
+  --smallText: 12px;
+  --baseText: 16px;
+  --largeText: 18px;
+  --xLargeText: 20px;
+
+  --grey1: #f7fafb;
+  --grey2: #c6d7d5;
+  --grey3: #929292;
+}
+
+/* 
+
+.primaryLightBackground {
+  background-color: #d7f2e4;
+}
+
+.secondaryLightBackground {
+  background-color: #c6d7d5;
+}
+two diff grey #D7F2E4  #C6D7D5*/
+
+/* #6b9c89; dark primary ?*/
+
 body {
   margin: 1em;
   font-family: "Lato", sans-serif;

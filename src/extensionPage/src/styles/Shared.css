@@ -1,4 +1,0 @@
-.heading {
-  composes: headingTxt from "./Colors.css";
-  font-weight: bold;
-}
