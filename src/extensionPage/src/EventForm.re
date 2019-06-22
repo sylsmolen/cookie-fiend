@@ -7,7 +7,7 @@ type style = {
   numberInputs: string,
 };
 
-let styles: style = requireCSS("./PluginForm.css");
+let styles: style = requireCSS("./EventForm.css");
 
 type action =
   | SetTimetout(int)
@@ -18,12 +18,16 @@ type action =
   | SetSelector(string)
   | SetRepeat(int)
   | SetEventValue(string)
+  | SelectMode(string)
+  | SetModeValue(string)
   | Save;
 
 type state = {
   isSaved: bool,
   selectorType: string,
   selector: string,
+  mode: string,
+  modeValue: string,
   scope: string,
   event: string,
   eventName: string,
@@ -35,6 +39,8 @@ type state = {
 let initialState: state = {
   isSaved: false,
   eventName: "",
+  mode: Settings.mode_once,
+  modeValue: "",
   selectorType: Settings.selector_css,
   selector: "",
   eventValue: "",
@@ -52,6 +58,7 @@ let make = () => {
         switch (action) {
         | Save => {...state, isSaved: true}
         | SelectScope(scope) => {...state, isSaved: false, scope}
+        | SelectMode(mode) => {...state, isSaved: false, mode}
         | SelectEvent(event) => {...state, isSaved: false, event}
         | SetTimetout(timeout) => {...state, isSaved: false, timeout}
         | SetEventName(eventName) => {...state, isSaved: false, eventName}
@@ -59,12 +66,12 @@ let make = () => {
         | SetSelector(selector) => {...state, isSaved: false, selector}
         | SetRepeat(repeat) => {...state, isSaved: false, repeat}
         | SetEventValue(eventValue) => {...state, isSaved: false, eventValue}
+        | SetModeValue(modeValue) => {...state, isSaved: false, modeValue}
         },
       initialState,
     );
 
   <div>
-    <h1> {ReasonReact.string("Add plugin")} </h1>
     <WhitePanel>
       <div className={formGet(styles)}>
         <Flex style=[Row, JustifyContentSpaceBetween]>
@@ -74,6 +81,17 @@ let make = () => {
             disabledOptions=[Settings.scope_browser]
             value={state.scope}
             onChange={value => dispatch(SelectScope(value))}
+          />
+          <SelectField
+            labelText="Execution mode"
+            options=Settings.mode
+            value={state.mode}
+            onChange={value => dispatch(SelectMode(value))}
+          />
+          <TextField
+            labelText="Mode value"
+            value={state.modeValue}
+            onChange={value => dispatch(SetModeValue(value))}
           />
           <SelectField
             labelText="Event"
@@ -119,21 +137,12 @@ let make = () => {
               />
             </>
           </Flex>
-          {state.isSaved
-             ? <>
-                 <p> {ReasonReact.string("Scope: " ++ state.scope)} </p>
-                 <p> {ReasonReact.string("Event: " ++ state.event)} </p>
-                 <p> {ReasonReact.string("Selector type: " ++ state.selectorType)} </p>
-                 <p> {ReasonReact.string("Selector: " ++ state.selector)} </p>
-                 <p> {ReasonReact.string("Event name: " ++ state.eventName)} </p>
-               </>
-             : ReasonReact.null}
         </Flex>
         <Button
           className={saveButtonGet(styles)}
           style=Primary
           onClick={_event => dispatch(Save)}
-          buttonText="save"
+          buttonText="Add event"
         />
       </div>
     </WhitePanel>

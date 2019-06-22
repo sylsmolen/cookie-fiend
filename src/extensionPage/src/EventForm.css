@@ -1,12 +1,9 @@
-.form {
-  max-width: 580px;
-}
-
 .numberInputs {
   min-width: 250px;
 }
 
 .saveButton {
+  margin-top: 0.5em;
   display: block;
   margin-left: auto;
 }
