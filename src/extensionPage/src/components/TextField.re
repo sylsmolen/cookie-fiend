@@ -10,7 +10,7 @@ let styles = requireCSS("./TextField.css");
 
 [@react.component]
 let make = (~labelText: string, ~value: string, ~onChange: string => unit) => {
-  let handleChange = event => onChange(ReactEvent.Form.target(event)##value);
+  let handleChange = event => getFormEventValue(event)->onChange;
 
   <div>
     <p className={labelGet(styles)}> {ReasonReact.string(labelText)} </p>

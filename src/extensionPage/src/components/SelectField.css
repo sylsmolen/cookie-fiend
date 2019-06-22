@@ -1,5 +1,5 @@
 .selectField {
-  composes: textBase from "../styles/Typography.css";
+  font-size: var(--baseText);
   padding: 6px;
   display: inline-block;
   border-width: 1px;
@@ -19,6 +19,5 @@
 }
 
 .label {
-  color: var(--lightTextColour);
-  margin-bottom: 0.1em;
+  composes: inputLabel from "../styles/shared.css";
 }

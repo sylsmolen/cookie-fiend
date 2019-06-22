@@ -28,7 +28,7 @@ let make =
     </option>;
 
   let optionList = Array.map(mapOptions, Array.of_list(options));
-  let handleChange = event => onChange(ReactEvent.Form.target(event)##value);
+  let handleChange = event => getFormEventValue(event)->onChange;
 
   <div>
     <p className={labelGet(styles)}> {ReasonReact.string(labelText)} </p>
