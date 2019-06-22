@@ -11,15 +11,31 @@ let styles: style = requireCSS("./PluginForm.css");
 type action =
   | SetTimetout(int)
   | SelectScope(string)
-  | SelectEvent(string);
+  | SelectEvent(string)
+  | SetEventName(string)
+  | SelectSelectorType(string)
+  | SetSelector(string)
+  | Save;
 
 type state = {
+  isSaved: bool,
+  selectorType: string,
+  selector: string,
   scope: string,
   event: string,
+  eventName: string,
   timeout: int,
 };
 
-let initialState: state = {scope: Settings.scope_url, event: Settings.event_style, timeout: 0};
+let initialState: state = {
+  isSaved: false,
+  eventName: "",
+  selectorType: Settings.selector_css,
+  selector: "",
+  scope: Settings.scope_url,
+  event: Settings.event_style,
+  timeout: 0,
+};
 
 [@react.component]
 let make = () => {
@@ -27,9 +43,13 @@ let make = () => {
     React.useReducer(
       (state, action) =>
         switch (action) {
-        | SelectScope(scope) => {...state, scope}
-        | SelectEvent(event) => {...state, event}
-        | SetTimetout(time) => {...state, timeout: time}
+        | Save => {...state, isSaved: true}
+        | SelectScope(scope) => {...state, isSaved: false, scope}
+        | SelectEvent(event) => {...state, isSaved: false, event}
+        | SetTimetout(timeout) => {...state, isSaved: false, timeout}
+        | SetEventName(eventName) => {...state, isSaved: false, eventName}
+        | SelectSelectorType(selectorType) => {...state, isSaved: false, selectorType}
+        | SetSelector(selector) => {...state, isSaved: false, selector}
         },
       initialState,
     );
@@ -51,13 +71,36 @@ let make = () => {
           value={state.event}
           onChange={value => dispatch(SelectEvent(value))}
         />
-        <TextField labelText="Inputs label" />
-        <p> {ReasonReact.string("Selected option: " ++ state.scope)} </p>
-        <p> {ReasonReact.string("Selected option: " ++ state.event)} </p>
+        <SelectField
+          labelText="Selector"
+          options=Settings.selector
+          disabledOptions=[Settings.selector_xpath]
+          value={state.selectorType}
+          onChange={value => dispatch(SelectSelectorType(value))}
+        />
+        <TextField
+          labelText="Name"
+          value={state.eventName}
+          onChange={value => dispatch(SetEventName(value))}
+        />
+        <TextField
+          labelText="Selector"
+          value={state.selector}
+          onChange={value => dispatch(SetSelector(value))}
+        />
+        {state.isSaved
+           ? <>
+               <p> {ReasonReact.string("Scope: " ++ state.scope)} </p>
+               <p> {ReasonReact.string("Event: " ++ state.event)} </p>
+               <p> {ReasonReact.string("Selector type: " ++ state.selectorType)} </p>
+               <p> {ReasonReact.string("Selector: " ++ state.selector)} </p>
+               <p> {ReasonReact.string("Event name: " ++ state.eventName)} </p>
+             </>
+           : ReasonReact.null}
         <Button
           className={saveButtonGet(styles)}
           style=Primary
-          onClick={_event => ()}
+          onClick={_event => dispatch(Save)}
           buttonText="save"
         />
       </Flex>
