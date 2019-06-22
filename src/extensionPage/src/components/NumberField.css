@@ -9,7 +9,7 @@
   transition: all 0.3s;
   outline: 0;
   margin-bottom: 0.5em;
-  min-width: 250px;
+  width: 100px;
   box-sizing: border-box;
 }
 

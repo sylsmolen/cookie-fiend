@@ -1,5 +1,5 @@
-let scope_url = "Current URL";
-let scope_origin = "Current origin";
+let scope_url = "URL";
+let scope_origin = "Origin";
 let scope_browser = "Browser";
 let scope = [scope_url, scope_origin, scope_browser];
 

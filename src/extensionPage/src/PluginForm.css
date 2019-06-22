@@ -1,7 +1,12 @@
 .form {
-  max-width: 250px;
+  max-width: 580px;
+}
+
+.numberInputs {
+  min-width: 250px;
 }
 
 .saveButton {
-  align-self: flex-end;
+  display: block;
+  margin-left: auto;
 }
