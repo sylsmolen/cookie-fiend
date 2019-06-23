@@ -14,7 +14,7 @@
   background-color: white;
 }
 
-.textField:focus {
+.selectField:focus {
   border-color: var(--secondaryColour);
 }
 

@@ -2,7 +2,7 @@ open Utils;
 
 [@bs.deriving abstract]
 type style = {
-  textField: string,
+  numberField: string,
   label: string,
 };
 
@@ -17,7 +17,7 @@ let make = (~labelText: string, ~value: int, ~step=1.0, ~min=0, ~onChange: int =
     <input
       min
       step
-      className={textFieldGet(styles)}
+      className={numberFieldGet(styles)}
       value={string_of_int(value)}
       type_="number"
       onChange=handleChange

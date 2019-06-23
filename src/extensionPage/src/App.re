@@ -1,2 +1,2 @@
 [@react.component]
-let make = () => <CreatePlugin />;
+let make = () => <PluginEditor />;

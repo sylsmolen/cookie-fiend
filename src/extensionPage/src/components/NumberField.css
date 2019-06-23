@@ -1,4 +1,4 @@
-.textField {
+.numberField {
   font-size: var(--baseText);
   padding: 6px;
   display: inline-block;
@@ -13,8 +13,8 @@
   box-sizing: border-box;
 }
 
-.textField:focus {
-  border-color: var(--secondaryColour);
+.numberField:focus {
+  border-color: var(--primaryColour);
 }
 
 .label {
