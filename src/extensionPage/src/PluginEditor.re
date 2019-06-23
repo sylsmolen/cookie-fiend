@@ -49,25 +49,16 @@ let blankEventState: pluginEvent = {
   repeat: 1,
 };
 
-type state = {events: array(pluginEvent)};
+type eventMap = IntMap.t(pluginEvent);
+let emptyEventMap = IntMap.empty;
 
-let initialState: state = {events: [|blankEventState|]};
+// let result: pluginEvent = IntMap.find(1, events3);
 
-module StringMap =
-  Map.Make({
-    type t = string;
-    let compare = compare;
-  });
+type state = {events: eventMap};
+let initialState: state = {events: IntMap.add(0, blankEventState, emptyEventMap)};
 
-type eventMap = StringMap.t(pluginEvent);
 
-let events = StringMap.empty;
 
-StringMap.add("key1", blankEventState, events);
-
-let result: pluginEvent = StringMap.find("key1", events);
-
-Js.log(result.selectorType);
 
 [@react.component]
 let make = () => {
@@ -75,7 +66,10 @@ let make = () => {
     React.useReducer(
       (state, action) =>
         switch (action) {
-        | AddEvent => state
+        | AddEvent =>
+          let lastIndex = getLastIntMapIndex(state.events);
+          let updatedEventMap = IntMap.add(lastIndex + 1, blankEventState, state.events);
+          {events: updatedEventMap};
         | RemoveEvent => state
         | MoveEventUp => state
         | MoveEventDown => state
@@ -92,11 +86,24 @@ let make = () => {
         },
       initialState,
     );
-  let mapEventList = event => <p> {ReasonReact.string("event")} </p>; // <Event event />;
-  let eventList = Array.map(mapEventList, state.events);
+
+  let getEventsAsArray = el => {
+    ();
+  };
+
+  let eventsAsList = IntMap.bindings()
+  // let mapEventList = event => <p> {ReasonReact.string("event")} </p>; // <Event event />;
+  let eventList = Array.map(mapEventList, Array_of_list());
 
   <div className={containerGet(styles)}>
     <h1> {ReasonReact.string("Create new plugin")} </h1>
+    <Button
+      // TODO
+      className=""
+      style=Primary
+      onClick={_e => dispatch(AddEvent)}
+      buttonText="Add event"
+    />
     {ReasonReact.array(eventList)}
   </div>;
 };
