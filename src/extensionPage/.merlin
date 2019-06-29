@@ -11,10 +11,12 @@ S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reas
 B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reason-react/lib/ocaml
 S src
 B lib/bs/src
-S src/data
-B lib/bs/src/data
-S src/components
-B lib/bs/src/components
-S src/model
-B lib/bs/src/model
+S src/Model
+B lib/bs/src/Model
+S src/Components
+B lib/bs/src/Components
+S src/Data
+B lib/bs/src/Data
+S src/Modules/PluginEditor
+B lib/bs/src/Modules/PluginEditor
 ####BSB GENERATED: NO EDIT}

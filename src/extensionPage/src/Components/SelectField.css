@@ -19,5 +19,5 @@
 }
 
 .label {
-  composes: inputLabel from "../styles/shared.css";
+  composes: inputLabel from "../Styles/shared.css";
 }

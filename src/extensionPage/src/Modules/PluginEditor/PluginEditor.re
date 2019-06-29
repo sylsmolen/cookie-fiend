@@ -53,9 +53,9 @@ let make = () => {
       (state, action) =>
         switch (action) {
         | AddEvent =>
-          let lastIndex = getLastIntMapIndex(state.events);
+          let newIndex = getLastIntMapIndex(state.events) + 1;
           let updatedEventMap =
-            IntMap.add(lastIndex + 1, {...blankEventState, id: lastIndex}, state.events);
+            IntMap.add(newIndex, {...blankEventState, id: newIndex}, state.events);
           {events: updatedEventMap};
         | RemoveEvent(id) => {events: IntMap.remove(id, state.events)}
         | MoveEventUp => state

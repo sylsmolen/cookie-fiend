@@ -1,4 +1,0 @@
-.testStyle {
-  composes: primaryText from "./styles/Colors.css";
-  display: flex;
-}
