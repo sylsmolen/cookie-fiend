@@ -16,7 +16,7 @@ type action =
   | MoveEventDown
   | SetTimetout((int, int))
   | SelectScope((int, string))
-  | SelectEvent((int, string))
+  | SelectEventType((int, string))
   | SetEventName((int, string))
   | SelectSelectorType((int, string))
   | SetSelector((int, string))
@@ -43,8 +43,6 @@ let blankEventState: Plugin.event = {
 type eventMap = IntMap.t(Plugin.event);
 let emptyEventMap = IntMap.empty;
 
-// let result: pluginEvent = IntMap.find(1, events3);
-
 type state = {events: eventMap};
 let initialState: state = {events: IntMap.add(0, blankEventState, emptyEventMap)};
 
@@ -62,26 +60,60 @@ let make = () => {
         | RemoveEvent(id) => {events: IntMap.remove(id, state.events)}
         | MoveEventUp => state
         | MoveEventDown => state
-        // | SelectScope((position, scope)) => {...state, scope}
-        // | SelectMode((position, mode)) => {...state, mode}
-        // | SelectEvent((position, event)) => {...state, event}
-        // | SetTimetout((position, timeout)) => {...state, timeout}
-        // | SetEventName((position, eventName)) => {...state, eventName}
-        // | SelectSelectorType((position, selectorType)) => {...state, selectorType}
-        // | SetSelector((position, selector)) => {...state, selector}
-        // | SetRepeat((position, repeat)) => {...state, repeat}
-        // | SetEventValue((position, eventValue)) => {...state, eventValue}
-        // | SetModeValue((position, modeValue)) => {...state, modeValue}
+        | SelectScope((id, scope)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), scope}, state.events),
+          }
+        | SelectMode((id, mode)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), mode}, state.events),
+          }
+        | SelectEventType((id, eventType)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), eventType}, state.events),
+          }
+        | SetTimetout((id, timeout)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events),
+          }
+        | SetEventName((id, eventName)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), eventName}, state.events),
+          }
+        | SelectSelectorType((id, selectorType)) => {
+            events:
+              IntMap.add(id, {...IntMap.find(id, state.events), selectorType}, state.events),
+          }
+        | SetSelector((id, selector)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), selector}, state.events),
+          }
+        | SetRepeat((id, repeat)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), repeat}, state.events),
+          }
+        | SetEventValue((id, eventValue)) => {
+            events:
+              IntMap.add(id, {...IntMap.find(id, state.events), eventValue}, state.events),
+          }
+        | SetModeValue((id, modeValue)) => {
+            events: IntMap.add(id, {...IntMap.find(id, state.events), modeValue}, state.events),
+          }
         },
       initialState,
     );
 
-  let getEventsAsArray = el => {
-    ();
-  };
-
   let mapEventList = ((key: int, event: Plugin.event)) =>
-    <Event key={string_of_int(key)} event removeEvent={id => dispatch(RemoveEvent(id))} />;
+    <Event
+      key={string_of_int(key)}
+      event
+      selectScope={(id, scope) => dispatch(SelectScope((id, scope)))}
+      setTimetout={(id, timeout) => dispatch(SetTimetout((id, timeout)))}
+      selectEventType={(id, eventType) => dispatch(SelectEventType((id, eventType)))}
+      setEventName={(id, eventName) => dispatch(SetEventName((id, eventName)))}
+      selectSelectorType={(id, selectorType) =>
+        dispatch(SelectSelectorType((id, selectorType)))
+      }
+      setSelector={(id, selector) => dispatch(SetSelector((id, selector)))}
+      setRepeat={(id, repeat) => dispatch(SetRepeat((id, repeat)))}
+      setEventValue={(id, eventValue) => dispatch(SetEventValue((id, eventValue)))}
+      selectMode={(id, mode) => dispatch(SelectMode((id, mode)))}
+      setModeValue={(id, modeValue) => dispatch(SetModeValue((id, modeValue)))}
+      removeEvent={id => dispatch(RemoveEvent(id))}
+    />;
   let eventList = Array.map(mapEventList, Array.of_list(IntMap.bindings(state.events)));
 
   <div className={containerGet(styles)}>

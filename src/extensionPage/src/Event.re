@@ -11,13 +11,32 @@ type style = {
 let styles: style = requireCSS("./Event.css");
 
 [@react.component]
-let make = (~event: Plugin.event, ~removeEvent: int => unit) => {
-  let onScopeChange = value => ();
-  let onModeChange = value => ();
-  let onModeValueChange = value => ();
-  let onEventTypeChange = value => ();
-  let onTimeoutChange = value => ();
-  // value => dispatch(SelectScope(value))
+let make =
+    (
+      ~event: Plugin.event,
+      ~removeEvent,
+      ~selectScope,
+      ~setTimetout,
+      ~selectEventType,
+      ~setEventName,
+      ~selectSelectorType,
+      ~setSelector,
+      ~setRepeat,
+      ~setEventValue,
+      ~selectMode,
+      ~setModeValue,
+    ) => {
+  let onScopeChange = value => selectScope(event.id, value);
+  let onModeChange = value => selectMode(event.id, value);
+  let onModeValueChange = value => setModeValue(event.id, value);
+  let onEventTypeChange = value => selectEventType(event.id, value);
+  let onTimeoutChange = value => setTimetout(event.id, value);
+  let onEventNameChange = value => setEventName(event.id, value);
+  let onSetRepeat = value => setRepeat(event.id, value);
+  let onSelectSelectorType = value => selectSelectorType(event.id, value);
+  let onSetSelector = value => setSelector(event.id, value);
+  let onSetEventValue = value => setEventValue(event.id, value);
+
   <WhitePanel className={panelGet(styles)}>
     <div className={formGet(styles)}>
       <Flex style=[Row, JustifyContentSpaceBetween]>
@@ -32,25 +51,25 @@ let make = (~event: Plugin.event, ~removeEvent: int => unit) => {
           labelText="Execution mode"
           options=Settings.mode
           value={event.mode}
-          onChange=onScopeChange
+          onChange=onModeChange
         />
-        <TextField labelText="Mode value" value={event.modeValue} onChange=onScopeChange />
+        <TextField labelText="Mode value" value={event.modeValue} onChange=onModeValueChange />
         <SelectField
-          labelText="Event"
+          labelText="Event type"
           options=Settings.event
           value={event.eventType}
-          onChange=onScopeChange
+          onChange=onEventTypeChange
         />
         <SelectField
           labelText="Selector"
           options=Settings.selector
           disabledOptions=[Settings.selector_xpath]
           value={event.selectorType}
-          onChange=onScopeChange
+          onChange=onSelectSelectorType
         />
-        <TextField labelText="Name" value={event.eventName} onChange=onScopeChange />
-        <TextField labelText="Event value" value={event.eventValue} onChange=onScopeChange />
-        <TextField labelText="Selector" value={event.selector} onChange=onScopeChange />
+        <TextField labelText="Event name" value={event.eventName} onChange=onEventNameChange />
+        <TextField labelText="Event value" value={event.eventValue} onChange=onSetEventValue />
+        <TextField labelText="Selector" value={event.selector} onChange=onSetSelector />
         <Flex style=[Row, JustifyContentSpaceBetween] className={numberInputsGet(styles)}>
           <>
             <NumberField
@@ -59,7 +78,7 @@ let make = (~event: Plugin.event, ~removeEvent: int => unit) => {
               value={event.timeout}
               onChange=onTimeoutChange
             />
-            <NumberField min=1 labelText="Repeat" value={event.repeat} onChange=onTimeoutChange />
+            <NumberField min=1 labelText="Repeat" value={event.repeat} onChange=onSetRepeat />
           </>
         </Flex>
       </Flex>
