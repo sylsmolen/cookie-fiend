@@ -2,8 +2,10 @@
   min-width: 250px;
 }
 
-.saveButton {
-  margin-top: 0.5em;
-  display: block;
-  margin-left: auto;
+.removeEventBtn {
+  margin-top: 1em;
+}
+
+.panel {
+  margin-top: 1em;
 }

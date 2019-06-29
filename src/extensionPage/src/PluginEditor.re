@@ -1,13 +1,17 @@
 open Utils;
 
 [@bs.deriving abstract]
-type style = {container: string};
+type style = {
+  container: string,
+  addEventBtn: string,
+  btnContainer: string,
+};
 
 let styles: style = requireCSS("./PluginEditor.css");
 
 type action =
   | AddEvent
-  | RemoveEvent
+  | RemoveEvent(int)
   | MoveEventUp
   | MoveEventDown
   | SetTimetout((int, int))
@@ -33,6 +37,7 @@ let blankEventState: Plugin.event = {
   eventType: Settings.event_style,
   timeout: 0,
   repeat: 1,
+  id: 0,
 };
 
 type eventMap = IntMap.t(Plugin.event);
@@ -51,9 +56,10 @@ let make = () => {
         switch (action) {
         | AddEvent =>
           let lastIndex = getLastIntMapIndex(state.events);
-          let updatedEventMap = IntMap.add(lastIndex + 1, blankEventState, state.events);
+          let updatedEventMap =
+            IntMap.add(lastIndex + 1, {...blankEventState, id: lastIndex}, state.events);
           {events: updatedEventMap};
-        | RemoveEvent => state
+        | RemoveEvent(id) => {events: IntMap.remove(id, state.events)}
         | MoveEventUp => state
         | MoveEventDown => state
         // | SelectScope((position, scope)) => {...state, scope}
@@ -75,18 +81,19 @@ let make = () => {
   };
 
   let mapEventList = ((key: int, event: Plugin.event)) =>
-    <Event key={string_of_int(key)} event />;
+    <Event key={string_of_int(key)} event removeEvent={id => dispatch(RemoveEvent(id))} />;
   let eventList = Array.map(mapEventList, Array.of_list(IntMap.bindings(state.events)));
 
   <div className={containerGet(styles)}>
     <h1> {ReasonReact.string("Create new plugin")} </h1>
-    <Button
-      // TODO
-      className=""
-      style=Primary
-      onClick={_e => dispatch(AddEvent)}
-      buttonText="Add event"
-    />
     {ReasonReact.array(eventList)}
+    <div className={btnContainerGet(styles)}>
+      <Button
+        className={addEventBtnGet(styles)}
+        style=Primary
+        onClick={_ => dispatch(AddEvent)}
+        buttonText="Add event"
+      />
+    </div>
   </div>;
 };

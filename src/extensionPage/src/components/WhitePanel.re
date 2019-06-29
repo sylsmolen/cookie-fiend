@@ -6,6 +6,6 @@ let styles = requireCSS("./WhitePanel.css");
 type style = {panel: string};
 
 [@react.component]
-let make = (~children) => {
-  <div className={panelGet(styles)}> children </div>;
+let make = (~children, ~className="") => {
+  <div className={panelGet(styles) ++ " " ++ className}> children </div>;
 };

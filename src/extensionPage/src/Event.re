@@ -3,80 +3,74 @@ open Utils;
 [@bs.deriving abstract]
 type style = {
   form: string,
-  saveButton: string,
+  panel: string,
+  removeEventBtn: string,
   numberInputs: string,
 };
 
 let styles: style = requireCSS("./Event.css");
 
 [@react.component]
-let make = (~event: Plugin.event) => {
+let make = (~event: Plugin.event, ~removeEvent: int => unit) => {
   let onScopeChange = value => ();
   let onModeChange = value => ();
   let onModeValueChange = value => ();
   let onEventTypeChange = value => ();
   let onTimeoutChange = value => ();
   // value => dispatch(SelectScope(value))
-  <div>
-    <WhitePanel>
-      <div className={formGet(styles)}>
-        <Flex style=[Row, JustifyContentSpaceBetween]>
-          <SelectField
-            labelText="Scope"
-            options=Settings.scope
-            disabledOptions=[Settings.scope_browser]
-            value={event.scope}
-            onChange=onScopeChange
-          />
-          <SelectField
-            labelText="Execution mode"
-            options=Settings.mode
-            value={event.mode}
-            onChange=onScopeChange
-          />
-          <TextField labelText="Mode value" value={event.modeValue} onChange=onScopeChange />
-          <SelectField
-            labelText="Event"
-            options=Settings.event
-            value={event.eventType}
-            onChange=onScopeChange
-          />
-          <SelectField
-            labelText="Selector"
-            options=Settings.selector
-            disabledOptions=[Settings.selector_xpath]
-            value={event.selectorType}
-            onChange=onScopeChange
-          />
-          <TextField labelText="Name" value={event.eventName} onChange=onScopeChange />
-          <TextField labelText="Event value" value={event.eventValue} onChange=onScopeChange />
-          <TextField labelText="Selector" value={event.selector} onChange=onScopeChange />
-          <Flex style=[Row, JustifyContentSpaceBetween] className={numberInputsGet(styles)}>
-            <>
-              <NumberField
-                labelText="Timeout (ms)"
-                step=50.0
-                value={event.timeout}
-                onChange=onTimeoutChange
-              />
-              <NumberField
-                min=1
-                labelText="Repeat"
-                value={event.repeat}
-                onChange=onTimeoutChange
-              />
-            </>
-          </Flex>
-        </Flex>
-        <Button
-          className={saveButtonGet(styles)}
-          style=Primary
-          onClick={_event => ()}
-          buttonText="Add event"
+  <WhitePanel className={panelGet(styles)}>
+    <div className={formGet(styles)}>
+      <Flex style=[Row, JustifyContentSpaceBetween]>
+        <SelectField
+          labelText="Scope"
+          options=Settings.scope
+          disabledOptions=[Settings.scope_browser]
+          value={event.scope}
+          onChange=onScopeChange
         />
-      </div>
-    </WhitePanel>
-  </div>;
+        <SelectField
+          labelText="Execution mode"
+          options=Settings.mode
+          value={event.mode}
+          onChange=onScopeChange
+        />
+        <TextField labelText="Mode value" value={event.modeValue} onChange=onScopeChange />
+        <SelectField
+          labelText="Event"
+          options=Settings.event
+          value={event.eventType}
+          onChange=onScopeChange
+        />
+        <SelectField
+          labelText="Selector"
+          options=Settings.selector
+          disabledOptions=[Settings.selector_xpath]
+          value={event.selectorType}
+          onChange=onScopeChange
+        />
+        <TextField labelText="Name" value={event.eventName} onChange=onScopeChange />
+        <TextField labelText="Event value" value={event.eventValue} onChange=onScopeChange />
+        <TextField labelText="Selector" value={event.selector} onChange=onScopeChange />
+        <Flex style=[Row, JustifyContentSpaceBetween] className={numberInputsGet(styles)}>
+          <>
+            <NumberField
+              labelText="Timeout (ms)"
+              step=50.0
+              value={event.timeout}
+              onChange=onTimeoutChange
+            />
+            <NumberField min=1 labelText="Repeat" value={event.repeat} onChange=onTimeoutChange />
+          </>
+        </Flex>
+      </Flex>
+    </div>
+    <Button
+      className={removeEventBtnGet(styles)}
+      style=Cancel
+      onClick={_e => removeEvent(event.id)}
+      buttonText="Remove event"
+    />
+  </WhitePanel>;
 };
 
 /*

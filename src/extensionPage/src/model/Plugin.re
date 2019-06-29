@@ -1,4 +1,5 @@
 type event = {
+  id: int,
   position: int,
   selectorType: string,
   selector: string,
