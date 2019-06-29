@@ -10,7 +10,7 @@ type style = {
 let styles: style = requireCSS("./Event.css");
 
 [@react.component]
-let make = (~event: PluginEditor.pluginEvent) => {
+let make = (~event: Plugin.event) => {
   let onScopeChange = value => ();
   let onModeChange = value => ();
   let onModeValueChange = value => ();

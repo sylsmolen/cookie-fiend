@@ -15,4 +15,6 @@ S src/data
 B lib/bs/src/data
 S src/components
 B lib/bs/src/components
+S src/model
+B lib/bs/src/model
 ####BSB GENERATED: NO EDIT}
