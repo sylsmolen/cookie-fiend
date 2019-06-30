@@ -13,7 +13,7 @@ let styles: style = requireCSS("./Event.css");
 [@react.component]
 let make =
     (
-      ~event: Plugin.event,
+      ~event: PluginReducer.event,
       ~removeEvent,
       ~selectScope,
       ~setTimetout,
