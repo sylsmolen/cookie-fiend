@@ -9,52 +9,46 @@ type style = {
 
 let styles: style = requireCSS("./PluginEditor.css");
 
-type eventMap = IntMap.t(PluginReducer.event);
-let emptyEventMap = IntMap.empty;
-
 let initialState: PluginReducer.state = {
-  events: IntMap.add(0, PluginReducer.blankEvent, emptyEventMap),
+  events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
 };
 
 [@react.component]
 let make =
   React.memo(() => {
-    let (state, dispatch) = React.useReducer(PluginReducer.getReducer, initialState);
-    let selectScope = React.useCallback((id, scope) => dispatch(SelectScope((id, scope))));
-    let setTimetout = React.useCallback((id, timeout) => dispatch(SetTimetout((id, timeout))));
-    let selectEventType =
-      React.useCallback((id, eventType) => dispatch(SelectEventType((id, eventType))));
-    let setEventName =
-      React.useCallback((id, eventName) => dispatch(SetEventName((id, eventName))));
-    let selectSelectorType =
-      React.useCallback((id, selectorType) => dispatch(SelectSelectorType((id, selectorType))));
-    let setSelector =
-      React.useCallback((id, selector) => dispatch(SetSelector((id, selector))));
-    let setRepeat = React.useCallback((id, repeat) => dispatch(SetRepeat((id, repeat))));
-    let setEventValue =
-      React.useCallback((id, eventValue) => dispatch(SetEventValue((id, eventValue))));
-    let selectMode = React.useCallback((id, mode) => dispatch(SelectMode((id, mode))));
-    let setModeValue =
-      React.useCallback((id, modeValue) => dispatch(SetModeValue((id, modeValue))));
-    let removeEvent = React.useCallback(id => dispatch(RemoveEvent(id)));
+    let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
+    let selectScope = callback((id, value) => dispatch(SelectScope((id, value))));
+    let setTimetout = callback((id, value) => dispatch(SetTimetout((id, value))));
+    let selectEventType = callback((id, value) => dispatch(SelectEventType((id, value))));
+    let setEventName = callback((id, value) => dispatch(SetEventName((id, value))));
+    let selectSelectorType = callback((id, value) => dispatch(SelectSelectorType((id, value))));
+    let setSelector = callback((id, value) => dispatch(SetSelector((id, value))));
+    let setRepeat = callback((id, value) => dispatch(SetRepeat((id, value))));
+    let setEventValue = callback((id, value) => dispatch(SetEventValue((id, value))));
+    let selectMode = callback((id, value) => dispatch(SelectMode((id, value))));
+    let setModeValue = callback((id, value) => dispatch(SetModeValue((id, value))));
+    let removeEvent = callback(id => dispatch(RemoveEvent(id)));
 
-    let mapEventList = ((key: int, event: PluginReducer.event)) =>
-      <Event
-        key={string_of_int(key)}
-        event
-        selectScope
-        setTimetout
-        selectEventType
-        setEventName
-        selectSelectorType
-        setSelector
-        setRepeat
-        setEventValue
-        selectMode
-        setModeValue
-        removeEvent
-      />;
-    let eventList = Array.map(mapEventList, Array.of_list(IntMap.bindings(state.events)));
+    let eventList =
+      Array.map(
+        ((key: int, event: PluginReducer.event)) =>
+          <Event
+            key={string_of_int(key)}
+            event
+            selectScope
+            setTimetout
+            selectEventType
+            setEventName
+            selectSelectorType
+            setSelector
+            setRepeat
+            setEventValue
+            selectMode
+            setModeValue
+            removeEvent
+          />,
+        Array.of_list(IntMap.bindings(state.events)),
+      );
 
     <div className={containerGet(styles)}>
       <h1> {ReasonReact.string("Create new plugin")} </h1>

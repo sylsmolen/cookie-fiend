@@ -2,6 +2,10 @@
 
 let getFormEventValue = event => ReactEvent.Form.target(event)##value;
 
+let callback = fn => {
+  React.useCallback(fn);
+};
+
 module StringMap =
   Map.Make({
     type t = string;

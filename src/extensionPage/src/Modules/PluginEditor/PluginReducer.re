@@ -51,7 +51,7 @@ let emptyEventMap = IntMap.empty;
 
 type state = {events: eventMap};
 
-let getReducer = (state, action) =>
+let get = (state, action) =>
   switch (action) {
   | AddEvent =>
     let newIndex = getLastIntMapIndex(state.events) + 1;
