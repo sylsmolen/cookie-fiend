@@ -13,24 +13,25 @@ let initialState: PluginReducer.state = {
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
 };
 
+let callback = fn => {
+  React.useCallback(fn);
+};
+
 [@react.component]
 let make =
   React.memo(() => {
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
-    let {
-      selectScope,
-      setTimetout,
-      selectEventType,
-      setEventName,
-      selectSelectorType,
-      setSelector,
-      setRepeat,
-      setEventValue,
-      selectMode,
-      setModeValue,
-      removeEvent,
-    }: PluginActions.pluginActions =
-      PluginActions.get(dispatch);
+    let selectScope = callback((id, value) => dispatch(SelectScope((id, value))));
+    let setTimetout = callback((id, value) => dispatch(SetTimetout((id, value))));
+    let selectEventType = callback((id, value) => dispatch(SelectEventType((id, value))));
+    let setEventName = callback((id, value) => dispatch(SetEventName((id, value))));
+    let selectSelectorType = callback((id, value) => dispatch(SelectSelectorType((id, value))));
+    let setSelector = callback((id, value) => dispatch(SetSelector((id, value))));
+    let setRepeat = callback((id, value) => dispatch(SetRepeat((id, value))));
+    let setEventValue = callback((id, value) => dispatch(SetEventValue((id, value))));
+    let selectMode = callback((id, value) => dispatch(SelectMode((id, value))));
+    let setModeValue = callback((id, value) => dispatch(SetModeValue((id, value))));
+    let removeEvent = callback(id => dispatch(RemoveEvent(id)));
 
     let eventList =
       Array.map(
