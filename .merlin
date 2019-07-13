@@ -1,20 +1,21 @@
 ####{BSB GENERATED: NO EDIT
 B lib/bs
 FLG -open CookieFiend
-FLG -ppx '/home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/reactjs_jsx_ppx_3.exe'
-FLG -ppx /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/bsppx.exe
-S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/ocaml
-B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/bs-platform/lib/ocaml
+FLG -ppx '/home/morpheme/Documents/code/cookie-fiend/node_modules/bs-platform/lib/bsppx.exe -bs-jsx 3'
+S /home/morpheme/Documents/code/cookie-fiend/node_modules/bs-platform/lib/ocaml
+B /home/morpheme/Documents/code/cookie-fiend/node_modules/bs-platform/lib/ocaml
 FLG -nostdlib -color always
 FLG -w -30-40+6+7+27+32..39+44+45+101
-S /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reason-react/lib/ocaml
-B /home/morpheme/Documents/code/cookie-fiend/src/extensionPage/node_modules/reason-react/lib/ocaml
-S src
-B lib/bs/src
-S src/Components
-B lib/bs/src/Components
-S src/Data
-B lib/bs/src/Data
-S src/Modules/PluginEditor
-B lib/bs/src/Modules/PluginEditor
+S /home/morpheme/Documents/code/cookie-fiend/node_modules/reason-react/lib/ocaml
+B /home/morpheme/Documents/code/cookie-fiend/node_modules/reason-react/lib/ocaml
+S src/BackgroundScripts
+B lib/bs/src/BackgroundScripts
+S src/ExtensionPage
+B lib/bs/src/ExtensionPage
+S src/ExtensionPage/Components
+B lib/bs/src/ExtensionPage/Components
+S src/ExtensionPage/Data
+B lib/bs/src/ExtensionPage/Data
+S src/ExtensionPage/Modules/PluginEditor
+B lib/bs/src/ExtensionPage/Modules/PluginEditor
 ####BSB GENERATED: NO EDIT}

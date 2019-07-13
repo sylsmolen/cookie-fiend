@@ -26,7 +26,7 @@ type flexOptions =
   | JustifyContentSpaceBetween;
 
 [@react.component]
-let make = (~children, ~style: list(flexOptions), ~className: option(string)="") => {
+let make = (~children, ~style: list(flexOptions), ~className="") => {
   let baseClassNames = flexGet(styles) ++ " " ++ className;
   let flexClassName =
     List.fold_left(

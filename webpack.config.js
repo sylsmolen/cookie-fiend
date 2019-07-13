@@ -1,20 +1,20 @@
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
-
-const outputDir = path.join(__dirname, 'build/')
 const bsOutputDir = path.join(__dirname, 'lib/js')
+
+// const outputDir = path.join(__dirname, 'build/')
+// const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: {
-    content_scripts: './src/contentScripts/index.js',
-    background_scripts: './src/backgroundScripts/index.js',
-    browser_action: './src/browserAction/index.js',
-    extension_page: './src/extensionPage/lib/js/src/Index.bs.js'
+    // content_scripts: './src/contentScripts/index.js',
+    // browser_action: './src/browserAction/index.js',
+    background_scripts: './lib/js/src/BackgroundScripts/BackgroundScript.bs.js',
+    extension_page: './lib/js/src/ExtensionPage/ExtensionPageIndex.bs.js'
   },
   mode: isProd ? 'production' : 'development',
   output: {
@@ -50,12 +50,16 @@ module.exports = {
     }),
     new webpack.SourceMapDevToolPlugin({}),
     new CopyWebpackPlugin([
-      { from: 'src/browserAction/public', to: 'browser_action/[name].[ext]' },
+      // { from: 'src/browserAction/public', to: 'browser_action/[name].[ext]' },
       {
-        from: 'src/extensionPage/public',
+        from: 'src/ExtensionPage/Public',
         to: 'extension_page/[name].[ext]'
       },
-      { from: 'public', to: '' }
+      { from: 'public', to: '' },
+      {
+        from: './src/**/*.css',
+        to: bsOutputDir
+      }
     ])
   ],
   module: {
