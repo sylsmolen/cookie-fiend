@@ -1,1 +1,0 @@
-export const COOKIE_FIEND = 'COOKIE_FIEND'
