@@ -8,6 +8,8 @@ FLG -nostdlib -color always
 FLG -w -30-40+6+7+27+32..39+44+45+101
 S /home/morpheme/Documents/code/cookie-fiend/node_modules/reason-react/lib/ocaml
 B /home/morpheme/Documents/code/cookie-fiend/node_modules/reason-react/lib/ocaml
+S src
+B lib/bs/src
 S src/BackgroundScripts
 B lib/bs/src/BackgroundScripts
 S src/ExtensionPage

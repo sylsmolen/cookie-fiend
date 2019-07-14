@@ -1,6 +1,32 @@
 open Utils;
 
 [@bs.deriving abstract]
+type tabQuery = {
+  currentWindow: bool,
+  active: bool,
+};
+
+let query = tabQuery(~currentWindow=true, ~active=false);
+
+[@bs.val] external queryTab: tabQuery => string = "browser.tabs.query";
+
+let res = queryTab(query);
+Js.log(res);
+
+/*
+
+  const activeTabQuery = window.browser.tabs.query({
+    currentWindow: true,
+    active: true
+  })
+
+  export const getActiveTabAsync = async () =>
+    activeTabQuery.then(head, logErr("couldn't get active tab"))
+
+ let myPromise = Js.Promise.make((~resolve, ~reject) => resolve(. 2));
+    */
+
+[@bs.deriving abstract]
 type style = {
   container: string,
   addEventBtn: string,

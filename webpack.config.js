@@ -45,7 +45,7 @@ module.exports = {
     // }),
     new WebExtWebpackPlugin({
       browserConsole: true,
-      startUrl: ['www.goal.com'],
+      startUrl: ['www.google.com'],
       sourceDir: path.resolve(__dirname, 'build')
     }),
     new webpack.SourceMapDevToolPlugin({}),
