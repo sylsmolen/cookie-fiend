@@ -22,3 +22,8 @@ let getLastIntMapIndex = map => {
   let maxBinding = IntMap.max_binding(map);
   fst(maxBinding);
 };
+
+// let id = setTimeout((.) => Js.log("hello"), 1000);
+
+type timerId;
+[@bs.val] external setTimeout: ((. unit) => unit, int) => timerId = "setTimeout";
