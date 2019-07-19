@@ -14,3 +14,4 @@ let extensionPageWindow =
   windowOptions(~url="/extension_page/index.html", ~width=850, ~height=550);
 
 onBrowserActionClick(() => createWindow(extensionPageWindow));
+createWindow(extensionPageWindow);
