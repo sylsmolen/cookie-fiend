@@ -1,15 +1,5 @@
 open Utils;
-
-[@bs.deriving abstract]
-type tabQuery = {active: bool};
-
-let query = tabQuery(~active=true);
-
-type tabArray = array(PluginReducer.tab);
-
-type tabQueryPromise = Js.Promise.t(array(PluginReducer.tab));
-
-[@bs.val] external queryTab: tabQuery => tabQueryPromise = "browser.tabs.query";
+open Tabs;
 
 [@bs.deriving abstract]
 type style = {
@@ -20,15 +10,12 @@ type style = {
 
 let styles: style = requireCSS("./PluginEditor.css");
 
+let callback = fn => {
+  React.useCallback(fn);
+};
 let initialState: PluginReducer.state = {
   tabs: [||],
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
-};
-
-exception TabQueryError(Js.Promise.error);
-
-let callback = fn => {
-  React.useCallback(fn);
 };
 
 [@react.component]
@@ -48,17 +35,16 @@ let make =
     let setModeValue = callback((id, value) => dispatch(SetModeValue((id, value))));
     let removeEvent = callback(id => dispatch(RemoveEvent(id)));
 
+    let receiveTabs = (value: tabs) => {
+      dispatch(ReceivedTabQuery(value));
+    };
+
+    let tabsError = err => {
+      dispatch(TabQueryError(err.value));
+    };
+
     React.useEffect0(() => {
-      ignore(
-        Js.Promise.(
-          queryTab(query)
-          |> then_(value => {
-               dispatch(ReceivedTabQuery(value));
-               resolve(value);
-             })
-          |> catch(err => reject(TabQueryError(err)))
-        ),
-      );
+      ignore(getActiveTabs(~onResolve=receiveTabs, ~onReject=tabsError));
       None;
     });
 

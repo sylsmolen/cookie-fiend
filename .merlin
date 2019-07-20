@@ -12,6 +12,8 @@ S src
 B lib/bs/src
 S src/BackgroundScripts
 B lib/bs/src/BackgroundScripts
+S src/Services
+B lib/bs/src/Services
 S src/ExtensionPage
 B lib/bs/src/ExtensionPage
 S src/ExtensionPage/Components
