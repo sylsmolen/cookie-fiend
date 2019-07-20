@@ -1,19 +1,11 @@
 open Utils;
-open Tabs;
-
-[@bs.deriving abstract]
-type style = {
-  container: string,
-  addEventBtn: string,
-  btnContainer: string,
-};
-
-let styles: style = requireCSS("./PluginEditor.css");
 
 let callback = fn => {
   React.useCallback(fn);
 };
+
 let initialState: PluginReducer.state = {
+  tabQueryError: false,
   tabs: [||],
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
 };
@@ -23,6 +15,7 @@ let make =
   React.memo(() => {
     [@react.component]
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
+
     let selectScope = callback((id, value) => dispatch(SelectScope((id, value))));
     let setTimetout = callback((id, value) => dispatch(SetTimetout((id, value))));
     let selectEventType = callback((id, value) => dispatch(SelectEventType((id, value))));
@@ -34,53 +27,31 @@ let make =
     let selectMode = callback((id, value) => dispatch(SelectMode((id, value))));
     let setModeValue = callback((id, value) => dispatch(SetModeValue((id, value))));
     let removeEvent = callback(id => dispatch(RemoveEvent(id)));
+    let addEvent = callback(_ => dispatch(AddEvent));
 
-    let receiveTabs = (value: tabs) => {
-      dispatch(ReceivedTabQuery(value));
-    };
-
-    let tabsError = err => {
-      dispatch(TabQueryError(err.value));
-    };
+    let receiveTabs = (value: Tabs.tabs) => dispatch(ReceiveTabs(value));
+    let tabQeryError = _ => dispatch(TabQueryError);
 
     React.useEffect0(() => {
-      ignore(getActiveTabs(~onResolve=receiveTabs, ~onReject=tabsError));
+      Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError);
       None;
     });
 
     Js.log(state.tabs);
 
-    let eventList =
-      Array.map(
-        ((key: int, event: PluginReducer.event)) =>
-          <Event
-            key={string_of_int(key)}
-            event
-            selectScope
-            setTimetout
-            selectEventType
-            setEventName
-            selectSelectorType
-            setSelector
-            setRepeat
-            setEventValue
-            selectMode
-            setModeValue
-            removeEvent
-          />,
-        Array.of_list(IntMap.bindings(state.events)),
-      );
-
-    <div className={containerGet(styles)}>
-      <h1> {ReasonReact.string("Create new plugin")} </h1>
-      {ReasonReact.array(eventList)}
-      <div className={btnContainerGet(styles)}>
-        <Button
-          className={addEventBtnGet(styles)}
-          style=Primary
-          onClick={_ => dispatch(AddEvent)}
-          buttonText="Add event"
-        />
-      </div>
-    </div>;
+    <PluginEditorLayout
+      selectScope
+      setTimetout
+      selectEventType
+      setEventName
+      selectSelectorType
+      setSelector
+      setRepeat
+      setEventValue
+      selectMode
+      setModeValue
+      removeEvent
+      addEvent
+      events={state.events}
+    />;
   });

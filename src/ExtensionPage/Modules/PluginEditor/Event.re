@@ -10,6 +10,10 @@ type style = {
 
 let styles: style = requireCSS("./Event.css");
 
+let callback = fn => {
+  React.useCallback(fn);
+};
+
 [@react.component]
 let make =
     (
@@ -26,16 +30,16 @@ let make =
       ~selectMode,
       ~setModeValue,
     ) => {
-  let onScopeChange = value => selectScope(event.id, value);
-  let onModeChange = value => selectMode(event.id, value);
-  let onModeValueChange = value => setModeValue(event.id, value);
-  let onEventTypeChange = value => selectEventType(event.id, value);
-  let onTimeoutChange = value => setTimetout(event.id, value);
-  let onEventNameChange = value => setEventName(event.id, value);
-  let onSetRepeat = value => setRepeat(event.id, value);
-  let onSelectSelectorType = value => selectSelectorType(event.id, value);
-  let onSetSelector = value => setSelector(event.id, value);
-  let onSetEventValue = value => setEventValue(event.id, value);
+  let onScopeChange = callback(value => selectScope(event.id, value));
+  let onModeChange = callback(value => selectMode(event.id, value));
+  let onModeValueChange = callback(value => setModeValue(event.id, value));
+  let onEventTypeChange = callback(value => selectEventType(event.id, value));
+  let onTimeoutChange = callback(value => setTimetout(event.id, value));
+  let onEventNameChange = callback(value => setEventName(event.id, value));
+  let onSetRepeat = callback(value => setRepeat(event.id, value));
+  let onSelectSelectorType = callback(value => selectSelectorType(event.id, value));
+  let onSetSelector = callback(value => setSelector(event.id, value));
+  let onSetEventValue = callback(value => setEventValue(event.id, value));
 
   <WhitePanel className={panelGet(styles)}>
     <div className={formGet(styles)}>

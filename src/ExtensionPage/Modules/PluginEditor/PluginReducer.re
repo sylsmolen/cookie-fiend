@@ -15,14 +15,6 @@ type event = {
   repeat: int,
 };
 
-type tab = {
-  active: bool,
-  windowId: int,
-  id: int,
-  title: string,
-  url: string,
-};
-
 type action =
   | AddEvent
   | RemoveEvent(int)
@@ -38,7 +30,8 @@ type action =
   | SetEventValue((int, string))
   | SelectMode((int, string))
   | SetModeValue((int, string))
-  | ReceivedTabQuery(array(tab));
+  | ReceiveTabs(Tabs.tabs)
+  | TabQueryError;
 
 let blankEvent: event = {
   position: 0,
@@ -60,17 +53,24 @@ let emptyEventMap = IntMap.empty;
 
 type state = {
   events: eventMap,
-  tabs: array(tab),
+  tabs: Tabs.tabs,
+  tabQueryError: bool,
 };
 
 let get = (state, action) =>
   switch (action) {
-  | ReceivedTabQuery(tabs) => {...state, tabs}
+  | ReceiveTabs(tabs) => {...state, tabs}
+  | TabQueryError => {...state, tabQueryError: true}
   | AddEvent =>
     let newIndex = getLastIntMapIndex(state.events) + 1;
     let updatedEventMap = IntMap.add(newIndex, {...blankEvent, id: newIndex}, state.events);
     {...state, events: updatedEventMap};
-  | RemoveEvent(id) => {...state, events: IntMap.remove(id, state.events)}
+  | RemoveEvent(id) =>
+    if (IntMap.cardinal(state.events) !== 1) {
+      {...state, events: IntMap.remove(id, state.events)};
+    } else {
+      state;
+    }
   | MoveEventUp => state
   | MoveEventDown => state
   | SelectScope((id, scope)) => {
