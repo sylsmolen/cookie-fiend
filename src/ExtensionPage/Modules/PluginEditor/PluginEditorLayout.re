@@ -13,7 +13,9 @@ let styles: style = requireCSS("./PluginEditorLayout.css");
 let make =
     (
       ~events,
+      ~pluginDetails: PluginReducer.pluginDetails,
       ~selectScope,
+      ~setPluginName,
       ~setTimetout,
       ~selectEventType,
       ~setEventName,
@@ -26,13 +28,15 @@ let make =
       ~removeEvent,
       ~addEvent,
     ) => {
+  let onScopeChange = callback(value => selectScope(value));
+  let onSetPluginName = callback(value => setPluginName(value));
+
   let eventList =
     Array.map(
-      ((key: int, event: PluginReducer.event)) =>
+      ((key: int, event)) =>
         <Event
           key={string_of_int(key)}
           event
-          selectScope
           setTimetout
           selectEventType
           setEventName
@@ -49,6 +53,16 @@ let make =
 
   <div className={containerGet(styles)}>
     <h1> {ReasonReact.string("Create new plugin")} </h1>
+    <div>
+      <TextField labelText="Selector" value={pluginDetails.name} onChange=onSetPluginName />
+      <SelectField
+        labelText="Scope"
+        options=Settings.scope
+        value={pluginDetails.scope}
+        onChange=onScopeChange
+        disabledOptions=[Settings.scope_browser]
+      />
+    </div>
     <div> {ReasonReact.array(eventList)} </div>
     <div className={btnContainerGet(styles)}>
       <Button

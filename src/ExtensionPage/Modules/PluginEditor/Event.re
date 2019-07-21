@@ -19,7 +19,6 @@ let make =
     (
       ~event: PluginReducer.event,
       ~removeEvent,
-      ~selectScope,
       ~setTimetout,
       ~selectEventType,
       ~setEventName,
@@ -30,7 +29,6 @@ let make =
       ~selectMode,
       ~setModeValue,
     ) => {
-  let onScopeChange = callback(value => selectScope(event.id, value));
   let onModeChange = callback(value => selectMode(event.id, value));
   let onModeValueChange = callback(value => setModeValue(event.id, value));
   let onEventTypeChange = callback(value => selectEventType(event.id, value));
@@ -44,13 +42,6 @@ let make =
   <WhitePanel className={panelGet(styles)}>
     <div className={formGet(styles)}>
       <Flex style=[Row, JustifyContentSpaceBetween]>
-        <SelectField
-          labelText="Scope"
-          options=Settings.scope
-          disabledOptions=[Settings.scope_browser]
-          value={event.scope}
-          onChange=onScopeChange
-        />
         <SelectField
           labelText="Execution mode"
           options=Settings.mode

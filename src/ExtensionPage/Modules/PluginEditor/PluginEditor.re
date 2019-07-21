@@ -7,6 +7,10 @@ let callback = fn => {
 let initialState: PluginReducer.state = {
   tabQueryError: false,
   tabs: [||],
+  pluginDetails: {
+    scope: Settings.scope_url,
+    name: "new plugin",
+  },
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
 };
 
@@ -16,7 +20,8 @@ let make =
     [@react.component]
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
 
-    let selectScope = callback((id, value) => dispatch(SelectScope((id, value))));
+    let selectScope = callback(value => dispatch(SelectScope(value)));
+    let setPluginName = callback(value => dispatch(SetPluginName(value)));
     let setTimetout = callback((id, value) => dispatch(SetTimetout((id, value))));
     let selectEventType = callback((id, value) => dispatch(SelectEventType((id, value))));
     let setEventName = callback((id, value) => dispatch(SetEventName((id, value))));
@@ -41,6 +46,7 @@ let make =
 
     <PluginEditorLayout
       selectScope
+      setPluginName
       setTimetout
       selectEventType
       setEventName
@@ -52,6 +58,7 @@ let make =
       setModeValue
       removeEvent
       addEvent
+      pluginDetails={state.pluginDetails}
       events={state.events}
     />;
   });

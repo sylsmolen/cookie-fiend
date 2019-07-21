@@ -7,12 +7,16 @@ type event = {
   selector: string,
   mode: string,
   modeValue: string,
-  scope: string,
   eventType: string,
   eventName: string,
   eventValue: string,
   timeout: int,
   repeat: int,
+};
+
+type pluginDetails = {
+  scope: string,
+  name: string,
 };
 
 type action =
@@ -21,7 +25,6 @@ type action =
   | MoveEventUp
   | MoveEventDown
   | SetTimetout((int, int))
-  | SelectScope((int, string))
   | SelectEventType((int, string))
   | SetEventName((int, string))
   | SelectSelectorType((int, string))
@@ -31,7 +34,9 @@ type action =
   | SelectMode((int, string))
   | SetModeValue((int, string))
   | ReceiveTabs(Tabs.tabs)
-  | TabQueryError;
+  | TabQueryError
+  | SelectScope(string)
+  | SetPluginName(string);
 
 let blankEvent: event = {
   position: 0,
@@ -41,7 +46,6 @@ let blankEvent: event = {
   selectorType: Settings.selector_css,
   selector: "",
   eventValue: "",
-  scope: Settings.scope_url,
   eventType: Settings.event_style,
   timeout: 0,
   repeat: 1,
@@ -52,6 +56,7 @@ type eventMap = IntMap.t(event);
 let emptyEventMap = IntMap.empty;
 
 type state = {
+  pluginDetails,
   events: eventMap,
   tabs: Tabs.tabs,
   tabQueryError: bool,
@@ -73,9 +78,19 @@ let get = (state, action) =>
     }
   | MoveEventUp => state
   | MoveEventDown => state
-  | SelectScope((id, scope)) => {
+  | SelectScope(scope) => {
       ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), scope}, state.events),
+      pluginDetails: {
+        ...state.pluginDetails,
+        scope,
+      },
+    }
+  | SetPluginName(name) => {
+      ...state,
+      pluginDetails: {
+        ...state.pluginDetails,
+        name,
+      },
     }
   | SelectMode((id, mode)) => {
       ...state,
