@@ -1,7 +1,7 @@
 open Utils;
 
-let callback = fn => {
-  React.useCallback(fn);
+let callback = (fn, args) => {
+  React.useCallback1(fn, args);
 };
 
 let initialState: PluginReducer.state = {
@@ -17,33 +17,40 @@ let initialState: PluginReducer.state = {
 [@react.component]
 let make =
   React.memo(() => {
-    [@react.component]
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
 
-    let selectScope = callback(value => dispatch(SelectScope(value)));
-    let setPluginName = callback(value => dispatch(SetPluginName(value)));
-    let setTimetout = callback((id, value) => dispatch(SetTimetout((id, value))));
-    let selectEventType = callback((id, value) => dispatch(SelectEventType((id, value))));
-    let setEventName = callback((id, value) => dispatch(SetEventName((id, value))));
-    let selectSelectorType = callback((id, value) => dispatch(SelectSelectorType((id, value))));
-    let setSelector = callback((id, value) => dispatch(SetSelector((id, value))));
-    let setRepeat = callback((id, value) => dispatch(SetRepeat((id, value))));
-    let setEventValue = callback((id, value) => dispatch(SetEventValue((id, value))));
-    let selectMode = callback((id, value) => dispatch(SelectMode((id, value))));
-    let setModeValue = callback((id, value) => dispatch(SetModeValue((id, value))));
-    let removeEvent = callback(id => dispatch(RemoveEvent(id)));
-    let addEvent = callback(_ => dispatch(AddEvent));
+    // let callback1 = callback([|dispatch|]);
+    let selectScope = callback(value => dispatch(SelectScope(value)), [|dispatch|]);
+    let setPluginName = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
+    let setTimetout =
+      callback((id, value) => dispatch(SetTimetout((id, value))), [|dispatch|]);
+    let selectEventType =
+      callback((id, value) => dispatch(SelectEventType((id, value))), [|dispatch|]);
+    let setEventName =
+      callback((id, value) => dispatch(SetEventName((id, value))), [|dispatch|]);
+    let selectSelectorType =
+      callback((id, value) => dispatch(SelectSelectorType((id, value))), [|dispatch|]);
+    let setSelector =
+      callback((id, value) => dispatch(SetSelector((id, value))), [|dispatch|]);
+    let setRepeat = callback((id, value) => dispatch(SetRepeat((id, value))), [|dispatch|]);
+    let setEventValue =
+      callback((id, value) => dispatch(SetEventValue((id, value))), [|dispatch|]);
+    let selectMode = callback((id, value) => dispatch(SelectMode((id, value))), [|dispatch|]);
+    let setModeValue =
+      callback((id, value) => dispatch(SetModeValue((id, value))), [|dispatch|]);
+    let removeEvent = React.useCallback1(id => dispatch(RemoveEvent(id)), [|dispatch|]);
+    let addEvent = callback(_ => dispatch(AddEvent), [|dispatch|]);
 
     let receiveTabs = (value: Tabs.tabs) => dispatch(ReceiveTabs(value));
     let tabQeryError = _ => dispatch(TabQueryError);
 
-    React.useEffect0(() => {
-      Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError);
-      None;
-    });
+    React.useEffect0(()
+      // Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError);
+      => None);
 
     Js.log(state.tabs);
 
+    Js.log("render PE");
     <PluginEditorLayout
       selectScope
       setPluginName
@@ -58,7 +65,8 @@ let make =
       setModeValue
       removeEvent
       addEvent
-      pluginDetails={state.pluginDetails}
+      scope={state.pluginDetails.scope}
+      name={state.pluginDetails.name}
       events={state.events}
     />;
   });
