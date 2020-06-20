@@ -9,7 +9,7 @@ let initialState: PluginReducer.state = {
   tabs: [||],
   pluginDetails: {
     scope: Settings.scope_url,
-    name: "new plugin",
+    name: "",
     url: ""
   },
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
@@ -21,7 +21,7 @@ let make =
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
     let selectScope = callback(value => dispatch(SelectScope(value)), [|dispatch|]);
     let setPluginName = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
-    let setUrl = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
+    let setUrl = callback(value => dispatch(SetUrl(value)), [|dispatch|]);
     let setTimetout =
       callback((id, value) => dispatch(SetTimetout((id, value))), [|dispatch|]);
     let selectEventType =

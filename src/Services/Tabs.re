@@ -15,7 +15,7 @@ exception TabQueryError(Js.Promise.error);
 
 [@bs.val] external queryTab: tabQuery => Js.Promise.t(tabs) = "browser.tabs.query";
 
-let getTabs = (~query: tabQuery, ~onResolve: tabs => unit, ~onReject: Js.Promise.error => unit) =>
+let getTabs = (query: tabQuery, ~onResolve: tabs => unit, ~onReject: Js.Promise.error => unit) =>
   ignore(
     Js.Promise.(
       queryTab(query)
@@ -31,4 +31,4 @@ let getTabs = (~query: tabQuery, ~onResolve: tabs => unit, ~onReject: Js.Promise
   );
 
 let activeTabQuery = tabQuery(~active=true);
-let getActiveTabs = getTabs(~query=activeTabQuery);
+let getActiveTabs = getTabs(activeTabQuery);
