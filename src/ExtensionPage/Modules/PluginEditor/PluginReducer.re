@@ -17,6 +17,7 @@ type event = {
 type pluginDetails = {
   scope: string,
   name: string,
+  url: string
 };
 
 type action =
@@ -36,6 +37,7 @@ type action =
   | ReceiveTabs(Tabs.tabs)
   | TabQueryError
   | SelectScope(string)
+  | SetUrl(string)
   | SetPluginName(string);
 
 let blankEvent: event = {
@@ -78,6 +80,13 @@ let get = (state, action) =>
     }
   | MoveEventUp => state
   | MoveEventDown => state
+  | SetUrl(url) => {
+    ...state,
+     pluginDetails: {
+        ...state.pluginDetails,
+        url,
+      },
+  }
   | SelectScope(scope) => {
       ...state,
       pluginDetails: {

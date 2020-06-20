@@ -13,6 +13,8 @@ let make =
       ~events,
       ~scope,
       ~name,
+      ~url,
+      ~setUrl,
       ~selectScope,
       ~setPluginName,
       ~setTimetout,
@@ -29,6 +31,7 @@ let make =
     ) => {
     let onScopeChange = callback(value => selectScope(value));
     let onSetPluginName = callback(value => setPluginName(value));
+    let onSetUrl = callback(value => setUrl(value));
 
     let eventList =
       Array.map(
@@ -52,7 +55,8 @@ let make =
     <div className={containerGet(styles)}>
       <h1> {ReasonReact.string("Create new plugin")} </h1>
       <div>
-        <TextField labelText="Selector" value=name onChange=onSetPluginName />
+        <TextField labelText="Name" value=name onChange=onSetPluginName />
+        <TextField labelText="Url" value=url onChange=onSetUrl />
         <SelectField
           labelText="Scope"
           options=Settings.scope

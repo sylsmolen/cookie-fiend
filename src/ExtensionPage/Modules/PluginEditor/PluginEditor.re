@@ -10,6 +10,7 @@ let initialState: PluginReducer.state = {
   pluginDetails: {
     scope: Settings.scope_url,
     name: "new plugin",
+    url: ""
   },
   events: IntMap.add(0, PluginReducer.blankEvent, IntMap.empty),
 };
@@ -18,10 +19,9 @@ let initialState: PluginReducer.state = {
 let make =
   React.memo(() => {
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
-
-    // let callback1 = callback([|dispatch|]);
     let selectScope = callback(value => dispatch(SelectScope(value)), [|dispatch|]);
     let setPluginName = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
+    let setUrl = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
     let setTimetout =
       callback((id, value) => dispatch(SetTimetout((id, value))), [|dispatch|]);
     let selectEventType =
@@ -43,16 +43,19 @@ let make =
 
     let receiveTabs = (value: Tabs.tabs) => dispatch(ReceiveTabs(value));
     let tabQeryError = _ => dispatch(TabQueryError);
+    
 
-    React.useEffect0(()
-      // Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError);
-      => None);
+    React.useEffect0(() => {
+      Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError)
+      None
+    });
 
     Js.log(state.tabs);
 
     Js.log("render PE");
     <PluginEditorLayout
       selectScope
+      setUrl
       setPluginName
       setTimetout
       selectEventType
@@ -67,6 +70,7 @@ let make =
       addEvent
       scope={state.pluginDetails.scope}
       name={state.pluginDetails.name}
+      url={state.pluginDetails.url}
       events={state.events}
     />;
   });

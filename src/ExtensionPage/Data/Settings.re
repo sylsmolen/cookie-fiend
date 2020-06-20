@@ -1,4 +1,4 @@
-let scope_url = "URL";
+let scope_url = "Exact URL";
 let scope_origin = "Origin";
 let scope_browser = "Browser";
 let scope = [scope_url, scope_origin, scope_browser];
