@@ -25,7 +25,7 @@ type action =
   | RemoveEvent(int)
   | MoveEventUp
   | MoveEventDown
-  | SetTimetout(int, int)
+  | SetTimeout(int, int)
   | SelectEventType(int, string)
   | SetEventName(int, string)
   | SelectSelectorType(int, string)
@@ -109,7 +109,7 @@ let get = (state, action) =>
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), eventType}, state.events),
     }
-  | SetTimetout(id, timeout) => {
+  | SetTimeout(id, timeout) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events),
     }

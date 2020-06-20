@@ -17,7 +17,7 @@ let make =
       ~setUrl,
       ~selectScope,
       ~setPluginName,
-      ~setTimetout,
+      ~setTimeout,
       ~selectEventType,
       ~setEventName,
       ~selectSelectorType,
@@ -41,7 +41,7 @@ let make =
           <Event
             key={string_of_int(key)}
             event
-            setTimetout
+            setTimeout
             selectEventType
             setEventName
             selectSelectorType

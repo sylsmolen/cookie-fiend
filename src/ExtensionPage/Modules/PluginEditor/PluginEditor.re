@@ -38,7 +38,7 @@ let make =
     <PluginEditorLayout
       savePlugin
       setUrl=callDispatch(value => dispatch(SetUrl(value)))
-      setTimetout=callDispatch((id, value) => dispatch(SetTimetout(id, value)))
+      setTimeout=callDispatch((id, value) => dispatch(SetTimeout(id, value)))
       selectEventType=callDispatch((id, value) => dispatch(SelectEventType(id, value)))
       setEventName=callDispatch((id, value) => dispatch(SetEventName(id, value)))
       selectSelectorType=callDispatch((id, value) => dispatch(SelectSelectorType(id, value)))

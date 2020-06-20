@@ -20,7 +20,7 @@ let make =
     (
       ~event: PluginReducer.event,
       ~removeEvent,
-      ~setTimetout,
+      ~setTimeout,
       ~selectEventType,
       ~setEventName,
       ~selectSelectorType,
@@ -33,7 +33,7 @@ let make =
     let onModeChange = callback(value => selectMode(event.id, value));
     let onModeValueChange = callback(value => setModeValue(event.id, value));
     let onEventTypeChange = callback(value => selectEventType(event.id, value));
-    let onTimeoutChange = callback(value => setTimetout(event.id, value));
+    let onTimeoutChange = callback(value => setTimeout(event.id, value));
     let onEventNameChange = callback(value => setEventName(event.id, value));
     let onSetRepeat = callback(value => setRepeat(event.id, value));
     let onSelectSelectorType = callback(value => selectSelectorType(event.id, value));
