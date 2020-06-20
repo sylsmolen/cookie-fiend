@@ -3,7 +3,6 @@ exception Reject(Js.Promise.error);
 [@bs.deriving abstract]
 type storageItem = {label: string};
 
-
 [@bs.val] external setBrowserStorageItem: storageItem => Js.Promise.t(unit) = "browser.storage.local.set";
 
 [@bs.val] external getBrowserStorageItem: string => Js.Promise.t(unit) = "browser.storage.local.get";
@@ -38,5 +37,3 @@ let get = (key: string, onResolve: unit => unit, onReject: Js.Promise.error => u
           })
       ),
     );
-
-

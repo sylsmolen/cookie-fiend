@@ -16,11 +16,3 @@ let mode = [mode_once, mode_interval, mode_on_load, mode_keyboard];
 let selector_css = "CSS";
 let selector_xpath = "XPath";
 let selector = [selector_css, selector_xpath];
-
-/*
- const CONDITIONS = {
-   EQUALS: 'EQUALS',
-   NOT_EQUALS: 'NOT_EQUALS',
-   INCLUDES: 'INCLUDES'
- }
- */
