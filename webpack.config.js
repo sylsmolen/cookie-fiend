@@ -1,18 +1,24 @@
 const webpack = require('webpack')
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WebExtWebpackPlugin = require('web-ext-webpack-plugin')
+const WebExtWebpackPlugin = require('./webpack/web-ext-webpack-plugin')
 const bsOutputDir = path.join(__dirname, 'lib/js')
 
-// const outputDir = path.join(__dirname, 'build/')
-// const HtmlWebpackPlugin = require('html-webpack-plugin')
+
+/*
+setup
+
+you need webpack : npm install --global webpack
+
+in one console run: `npm start`
+in another one: `webpack --watch`
+
+*/
 
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   entry: {
-    // content_scripts: './src/contentScripts/index.js',
-    // browser_action: './src/browserAction/index.js',
     background_scripts: './lib/js/src/BackgroundScripts/BackgroundScript.bs.js',
     extension_page: './lib/js/src/ExtensionPage/ExtensionPageIndex.bs.js'
   },
