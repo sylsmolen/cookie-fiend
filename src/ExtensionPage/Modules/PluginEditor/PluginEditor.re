@@ -40,21 +40,28 @@ let make =
       callback((id, value) => dispatch(SetModeValue((id, value))), [|dispatch|]);
     let removeEvent = React.useCallback1(id => dispatch(RemoveEvent(id)), [|dispatch|]);
     let addEvent = callback(_ => dispatch(AddEvent), [|dispatch|]);
-
     let receiveTabs = (value: Tabs.tabs) => dispatch(ReceiveTabs(value));
-    let tabQeryError = _ => dispatch(TabQueryError);
-    
+    let tabQeryError = _ => dispatch(TabQueryError);    
 
     React.useEffect0(() => {
       Tabs.getActiveTabs(~onResolve=receiveTabs, ~onReject=tabQeryError)
       None
     });
 
+    let savePluginSuccess = () => Js.log("Item saved");
+    let savePluginError = (err) => Js.log(err);
+
+    let savePlugin = () => {
+       Js.log("saving");
+      Storage.set(state.pluginDetails.name, savePluginSuccess, savePluginError)
+    }
+
     Js.log(state.tabs);
 
     Js.log("render PE");
     <PluginEditorLayout
       selectScope
+      savePlugin
       setUrl
       setPluginName
       setTimetout

@@ -28,10 +28,12 @@ let make =
       ~setModeValue,
       ~removeEvent,
       ~addEvent,
+      ~savePlugin
     ) => {
     let onScopeChange = callback(value => selectScope(value));
     let onSetPluginName = callback(value => setPluginName(value));
     let onSetUrl = callback(value => setUrl(value));
+    let onSavePlugin = callback(_ => savePlugin());
 
     let eventList =
       Array.map(
@@ -53,8 +55,15 @@ let make =
         Array.of_list(IntMap.bindings(events)),
       );
     <div className={containerGet(styles)}>
-      <h1> {ReasonReact.string("Create new plugin")} </h1>
-      <div>
+      <Flex style=[Row, JustifyContentSpaceBetween]>
+        <h1> {ReasonReact.string("Create new plugin")} </h1>
+        <Button
+          style=Primary
+          onClick=onSavePlugin
+          buttonText="Save" />
+      </Flex> 
+       <div>
+
         <TextField labelText="Name" value=name onChange=onSetPluginName />
         <TextField labelText="Url" value=url onChange=onSetUrl />
         <SelectField
