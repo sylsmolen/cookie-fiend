@@ -1,9 +1,5 @@
 open Utils;
 
-let callback = (fn, args) => {
-  React.useCallback1(fn, args);
-};
-
 let initialState: PluginReducer.state = {
   tabQueryError: false,
   tabs: [||],
@@ -19,27 +15,7 @@ let initialState: PluginReducer.state = {
 let make =
   React.memo(() => {
     let (state, dispatch) = React.useReducer(PluginReducer.get, initialState);
-    let selectScope = callback(value => dispatch(SelectScope(value)), [|dispatch|]);
-    let setPluginName = callback(value => dispatch(SetPluginName(value)), [|dispatch|]);
-    let setUrl = callback(value => dispatch(SetUrl(value)), [|dispatch|]);
-    let setTimetout =
-      callback((id, value) => dispatch(SetTimetout((id, value))), [|dispatch|]);
-    let selectEventType =
-      callback((id, value) => dispatch(SelectEventType((id, value))), [|dispatch|]);
-    let setEventName =
-      callback((id, value) => dispatch(SetEventName((id, value))), [|dispatch|]);
-    let selectSelectorType =
-      callback((id, value) => dispatch(SelectSelectorType((id, value))), [|dispatch|]);
-    let setSelector =
-      callback((id, value) => dispatch(SetSelector((id, value))), [|dispatch|]);
-    let setRepeat = callback((id, value) => dispatch(SetRepeat((id, value))), [|dispatch|]);
-    let setEventValue =
-      callback((id, value) => dispatch(SetEventValue((id, value))), [|dispatch|]);
-    let selectMode = callback((id, value) => dispatch(SelectMode((id, value))), [|dispatch|]);
-    let setModeValue =
-      callback((id, value) => dispatch(SetModeValue((id, value))), [|dispatch|]);
-    let removeEvent = React.useCallback1(id => dispatch(RemoveEvent(id)), [|dispatch|]);
-    let addEvent = callback(_ => dispatch(AddEvent), [|dispatch|]);
+    let callDispatch = (act) => React.useCallback1(act, [|dispatch|])    
     let receiveTabs = (value: Tabs.tabs) => dispatch(ReceiveTabs(value));
     let tabQeryError = _ => dispatch(TabQueryError);    
 
@@ -57,28 +33,27 @@ let make =
     }
 
     Js.log(state.tabs);
-
     Js.log("render PE");
+
     <PluginEditorLayout
-      selectScope
       savePlugin
-      setUrl
-      setPluginName
-      setTimetout
-      selectEventType
-      setEventName
-      selectSelectorType
-      setSelector
-      setRepeat
-      setEventValue
-      selectMode
-      setModeValue
-      removeEvent
-      addEvent
+      setUrl=callDispatch(value => dispatch(SetUrl(value)))
+      setTimetout=callDispatch((id, value) => dispatch(SetTimetout(id, value)))
+      selectEventType=callDispatch((id, value) => dispatch(SelectEventType(id, value)))
+      setEventName=callDispatch((id, value) => dispatch(SetEventName(id, value)))
+      selectSelectorType=callDispatch((id, value) => dispatch(SelectSelectorType(id, value)))
+      setSelector=callDispatch((id, value) => dispatch(SetSelector(id, value)))
+      setRepeat=callDispatch((id, value) => dispatch(SetRepeat(id, value)))
+      setEventValue=callDispatch((id, value) => dispatch(SetEventValue(id, value)))
+      selectMode=callDispatch((id, value) => dispatch(SelectMode(id, value)))
+      setModeValue=callDispatch((id, value) => dispatch(SetModeValue(id, value)))
+      removeEvent=callDispatch(id => dispatch(RemoveEvent(id)))
+      addEvent=callDispatch(_ => dispatch(AddEvent))
+      setPluginName=callDispatch(value => dispatch(SetPluginName(value)))
+      selectScope=callDispatch(value => dispatch(SelectScope(value)))
       scope={state.pluginDetails.scope}
       name={state.pluginDetails.name}
       url={state.pluginDetails.url}
       events={state.events}
     />;
   });
-  

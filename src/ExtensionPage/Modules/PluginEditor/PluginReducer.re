@@ -25,15 +25,15 @@ type action =
   | RemoveEvent(int)
   | MoveEventUp
   | MoveEventDown
-  | SetTimetout((int, int))
-  | SelectEventType((int, string))
-  | SetEventName((int, string))
-  | SelectSelectorType((int, string))
-  | SetSelector((int, string))
-  | SetRepeat((int, int))
-  | SetEventValue((int, string))
-  | SelectMode((int, string))
-  | SetModeValue((int, string))
+  | SetTimetout(int, int)
+  | SelectEventType(int, string)
+  | SetEventName(int, string)
+  | SelectSelectorType(int, string)
+  | SetSelector(int, string)
+  | SetRepeat(int, int)
+  | SetEventValue(int, string)
+  | SelectMode(int, string)
+  | SetModeValue(int, string)
   | ReceiveTabs(Tabs.tabs)
   | TabQueryError
   | SelectScope(string)
@@ -101,41 +101,40 @@ let get = (state, action) =>
         name,
       },
     }
-  | SelectMode((id, mode)) => {
+  | SelectMode(id, mode) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), mode}, state.events),
     }
-  | SelectEventType((id, eventType)) => {
+  | SelectEventType(id, eventType) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), eventType}, state.events),
     }
-  | SetTimetout((id, timeout)) => {
+  | SetTimetout(id, timeout) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events),
     }
-  | SetEventName((id, eventName)) => {
+  | SetEventName(id, eventName) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), eventName}, state.events),
     }
-  | SelectSelectorType((id, selectorType)) => {
+  | SelectSelectorType(id, selectorType) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), selectorType}, state.events),
     }
-  | SetSelector((id, selector)) => {
+  | SetSelector(id, selector) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), selector}, state.events),
     }
-  | SetRepeat((id, repeat)) => {
+  | SetRepeat(id, repeat) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), repeat}, state.events),
     }
-  | SetEventValue((id, eventValue)) => {
+  | SetEventValue(id, eventValue) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), eventValue}, state.events),
     }
-  | SetModeValue((id, modeValue)) => {
+  | SetModeValue(id, modeValue) => {
       ...state,
       events: IntMap.add(id, {...IntMap.find(id, state.events), modeValue}, state.events),
     }
   };
-  
