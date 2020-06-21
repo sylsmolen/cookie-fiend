@@ -17,7 +17,7 @@ type event = {
 type pluginDetails = {
   scope: string,
   name: string,
-  url: string
+  url: string,
 };
 
 type action =
@@ -70,23 +70,18 @@ let get = (state, action) =>
   | TabQueryError => {...state, tabQueryError: true}
   | AddEvent =>
     let newIndex = getLastIntMapIndex(state.events) + 1;
-    let updatedEventMap = IntMap.add(newIndex, {...blankEvent, id: newIndex}, state.events);
-    {...state, events: updatedEventMap};
-  | RemoveEvent(id) =>
-    if (IntMap.cardinal(state.events) !== 1) {
-      {...state, events: IntMap.remove(id, state.events)};
-    } else {
-      state;
-    }
+    let events = IntMap.add(newIndex, {...blankEvent, id: newIndex}, state.events);
+    {...state, events};
+  | RemoveEvent(id) => IntMap.cardinal(state.events) !== 1 ? {...state, events: IntMap.remove(id, state.events)} : state
   | MoveEventUp => state
   | MoveEventDown => state
   | SetUrl(url) => {
-    ...state,
-     pluginDetails: {
+      ...state,
+      pluginDetails: {
         ...state.pluginDetails,
         url,
       },
-  }
+    }
   | SelectScope(scope) => {
       ...state,
       pluginDetails: {
@@ -101,40 +96,31 @@ let get = (state, action) =>
         name,
       },
     }
-  | SelectMode(id, mode) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), mode}, state.events),
-    }
-  | SelectEventType(id, eventType) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), eventType}, state.events),
-    }
-  | SetTimeout(id, timeout) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events),
-    }
-  | SetEventName(id, eventName) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), eventName}, state.events),
-    }
-  | SelectSelectorType(id, selectorType) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), selectorType}, state.events),
-    }
-  | SetSelector(id, selector) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), selector}, state.events),
-    }
-  | SetRepeat(id, repeat) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), repeat}, state.events),
-    }
-  | SetEventValue(id, eventValue) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), eventValue}, state.events),
-    }
-  | SetModeValue(id, modeValue) => {
-      ...state,
-      events: IntMap.add(id, {...IntMap.find(id, state.events), modeValue}, state.events),
-    }
+  | SelectMode(id, mode) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), mode}, state.events);
+    {...state, events};
+  | SelectEventType(id, eventType) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), eventType}, state.events);
+    {...state, events};
+  | SetTimeout(id, timeout) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events);
+    {...state, events};
+  | SetEventName(id, eventName) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), eventName}, state.events);
+    {...state, events};
+  | SelectSelectorType(id, selectorType) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), selectorType}, state.events);
+    {...state, events};
+  | SetSelector(id, selector) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), selector}, state.events);
+    {...state, events};
+  | SetRepeat(id, repeat) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), repeat}, state.events);
+    {...state, events};
+  | SetEventValue(id, eventValue) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), eventValue}, state.events);
+    {...state, events};
+  | SetModeValue(id, modeValue) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), modeValue}, state.events);
+    {...state, events};
   };
