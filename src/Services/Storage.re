@@ -1,16 +1,16 @@
 exception Reject(Js.Promise.error);
 
 [@bs.deriving abstract]
-type storageItem = {label: string};
+type storageItem = {key: string};
 
-[@bs.val] external setBrowserStorageItem: storageItem => Js.Promise.t(unit) = "browser.storage.local.set";
+[@bs.val] external setBrowserStorageItem: 'a => Js.Promise.t(unit) = "browser.storage.local.set";
 
-[@bs.val] external getBrowserStorageItem: string => Js.Promise.t(unit) = "browser.storage.local.get";
+[@bs.val] external getBrowserStorageItem: string => Js.Promise.t(string) = "browser.storage.local.get";
 
-let set = (text: string, onResolve: unit => unit, onReject: Js.Promise.error => unit) =>
+let set = (item: 'a, onResolve: unit => unit, onReject: Js.Promise.error => unit) =>
   ignore(
       Js.Promise.(
-        setBrowserStorageItem(storageItem(~label=text))
+        setBrowserStorageItem(item)
         |> then_(value => {
             onResolve(value);
             resolve(value);
@@ -23,7 +23,7 @@ let set = (text: string, onResolve: unit => unit, onReject: Js.Promise.error => 
     );
 
 
-let get = (key: string, onResolve: unit => unit, onReject: Js.Promise.error => unit) =>
+let get = (key: string, onResolve: string => unit, onReject: Js.Promise.error => unit) =>
   ignore(
       Js.Promise.(
         getBrowserStorageItem(key)

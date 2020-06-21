@@ -28,8 +28,10 @@ let make =
     let savePluginError = (err) => Js.log(err);
 
     let savePlugin = () => {
-       Js.log("saving");
-      Storage.set(state.pluginDetails.name, savePluginSuccess, savePluginError)
+      Js.log("saving");
+      let plugin = Js.Dict.empty();
+      Js.Dict.set(plugin, state.pluginDetails.url, state.events)
+      Storage.set(plugin, savePluginSuccess, savePluginError)
     }
 
     Js.log(state.tabs);

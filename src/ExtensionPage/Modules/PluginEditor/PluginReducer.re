@@ -8,7 +8,7 @@ type event = {
   mode: string,
   modeValue: string,
   eventType: string,
-  eventName: string,
+  name: string,
   eventValue: string,
   timeout: int,
   repeat: int,
@@ -42,7 +42,7 @@ type action =
 
 let blankEvent: event = {
   position: 0,
-  eventName: "",
+  name: "",
   mode: Settings.mode_once,
   modeValue: "",
   selectorType: Settings.selector_css,
@@ -105,8 +105,8 @@ let get = (state, action) =>
   | SetTimeout(id, timeout) =>
     let events = IntMap.add(id, {...IntMap.find(id, state.events), timeout}, state.events);
     {...state, events};
-  | SetEventName(id, eventName) =>
-    let events = IntMap.add(id, {...IntMap.find(id, state.events), eventName}, state.events);
+  | SetEventName(id, name) =>
+    let events = IntMap.add(id, {...IntMap.find(id, state.events), name}, state.events);
     {...state, events};
   | SelectSelectorType(id, selectorType) =>
     let events = IntMap.add(id, {...IntMap.find(id, state.events), selectorType}, state.events);

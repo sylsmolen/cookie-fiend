@@ -20,7 +20,8 @@ const isProd = process.env.NODE_ENV === 'production'
 module.exports = {
   entry: {
     background_scripts: './lib/js/src/BackgroundScripts/BackgroundScript.bs.js',
-    extension_page: './lib/js/src/ExtensionPage/ExtensionPageIndex.bs.js'
+    extension_page: './lib/js/src/ExtensionPage/ExtensionPageIndex.bs.js',
+    content_scripts: './lib/js/src/ContentScripts/ContentScript.bs.js',
   },
   mode: isProd ? 'production' : 'development',
   output: {

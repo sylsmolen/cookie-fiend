@@ -64,7 +64,7 @@ let make =
             value={event.selectorType}
             onChange=onSelectSelectorType
           />
-          <TextField labelText="Event name" value={event.eventName} onChange=onEventNameChange />
+          <TextField labelText="Event name" value={event.name} onChange=onEventNameChange />
           <TextField labelText="Event value" value={event.eventValue} onChange=onSetEventValue />
           <TextField labelText="Selector" value={event.selector} onChange=onSetSelector />
           <Flex style=[Row, JustifyContentSpaceBetween] className={numberInputsGet(styles)}>

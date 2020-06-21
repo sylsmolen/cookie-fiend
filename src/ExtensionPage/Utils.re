@@ -26,3 +26,6 @@ let getLastIntMapIndex = map => {
 
 type timerId;
 [@bs.val] external setTimeout: ((. unit) => unit, int) => timerId = "setTimeout";
+
+
+[@bs.val] external windowLocation: string = "window.location.href";
