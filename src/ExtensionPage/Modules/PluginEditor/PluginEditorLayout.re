@@ -38,7 +38,7 @@ let make =
     let eventList =
       Array.map(
         ((key: int, event)) =>
-          <Event
+          <EventElement
             key={string_of_int(key)}
             event
             setTimeout

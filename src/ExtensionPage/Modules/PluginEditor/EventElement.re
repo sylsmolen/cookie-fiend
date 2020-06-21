@@ -1,4 +1,5 @@
 open Utils;
+open Event;
 
 [@bs.deriving abstract]
 type style = {
@@ -8,7 +9,7 @@ type style = {
   numberInputs: string,
 };
 
-let styles: style = requireCSS("./Event.css");
+let styles: style = requireCSS("./EventElement.css");
 
 let callback = fn => {
   React.useCallback(fn);
@@ -18,7 +19,7 @@ let callback = fn => {
 let make =
   React.memo(
     (
-      ~event: PluginReducer.event,
+      ~event: event,
       ~removeEvent,
       ~setTimeout,
       ~selectEventType,

@@ -1,18 +1,5 @@
 open Utils;
-
-type event = {
-  id: int,
-  position: int,
-  selectorType: string,
-  selector: string,
-  mode: string,
-  modeValue: string,
-  eventType: string,
-  name: string,
-  eventValue: string,
-  timeout: int,
-  repeat: int,
-};
+open Event;
 
 type pluginDetails = {
   scope: string,
@@ -40,6 +27,13 @@ type action =
   | SetUrl(string)
   | SetPluginName(string);
 
+type state = {
+  pluginDetails,
+  events: eventMap,
+  tabs: Tabs.tabs,
+  tabQueryError: bool,
+};
+
 let blankEvent: event = {
   position: 0,
   name: "",
@@ -52,16 +46,6 @@ let blankEvent: event = {
   timeout: 0,
   repeat: 1,
   id: 0,
-};
-
-type eventMap = IntMap.t(event);
-let emptyEventMap = IntMap.empty;
-
-type state = {
-  pluginDetails,
-  events: eventMap,
-  tabs: Tabs.tabs,
-  tabQueryError: bool,
 };
 
 let get = (state, action) =>
